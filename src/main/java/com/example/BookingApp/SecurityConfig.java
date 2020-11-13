@@ -22,7 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/")
                 .permitAll()
                 .antMatchers("/admin/**")
-                .hasAuthority("ADMIN");
+                .hasAuthority("ADMIN")
+                .and().exceptionHandling().accessDeniedPage("/403");
     }
 
 }
