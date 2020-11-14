@@ -1,6 +1,6 @@
 package com.example.BookingApp.accommodation.entity;
 
-import com.example.BookingApp.user.User;
+import com.example.BookingApp.user.model.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,6 +13,7 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer reservationNumber;
     @OneToOne
     @JoinColumn(name="user_id")
     private User user;

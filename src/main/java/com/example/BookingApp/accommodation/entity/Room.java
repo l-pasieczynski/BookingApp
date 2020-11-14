@@ -20,6 +20,8 @@ public class Room {
     private RoomStandard roomStandard;
     private String description;
     private boolean available;
+    @ManyToOne
+    private Accommodation accommodation;
 
 
 }
