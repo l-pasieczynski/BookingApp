@@ -42,8 +42,12 @@ public class AccommodationService {
         return findAccommodationByNameOrCity;
     }
 
-    public void save(Accommodation accommodation) {
-        accommodationRepository.save(accommodation);
+    public Accommodation save(Accommodation accommodation) {
+        Accommodation accommodationToSave = findById(accommodation.getId());
+        if (accommodationToSave == null){
+            accommodationRepository.save(accommodation);
+        }
+            return accommodationToSave;
     }
 
     public void delete(Accommodation accommodation) {

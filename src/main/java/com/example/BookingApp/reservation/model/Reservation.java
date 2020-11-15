@@ -1,5 +1,7 @@
-package com.example.BookingApp.accommodation.entity;
+package com.example.BookingApp.reservation.model;
 
+import com.example.BookingApp.accommodation.entity.Accommodation;
+import com.example.BookingApp.accommodation.entity.Room;
 import com.example.BookingApp.user.model.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -37,5 +39,11 @@ public class Reservation {
         this.created = LocalDate.now();
     }
 
+    public LocalDate bookOut(){
+        return bookOut;
+    }
 
+    public Room roomId() {
+        return room;
+    }
 }

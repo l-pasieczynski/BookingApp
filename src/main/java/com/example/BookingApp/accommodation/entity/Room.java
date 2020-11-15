@@ -1,5 +1,6 @@
 package com.example.BookingApp.accommodation.entity;
 
+import com.example.BookingApp.reservation.model.Reservation;
 import lombok.Getter;
 import lombok.Setter;
 
