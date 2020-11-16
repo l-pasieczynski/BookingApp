@@ -58,8 +58,9 @@ public class AccommodationService {
 //        return accommodationToSave;
 //    }
 
-    public void update (Accommodation accommodation){
+    public Accommodation update (Accommodation accommodation){
         accommodationRepository.save(findById(accommodation.getId()));
+        return accommodation;
     }
 
     public void delete(Accommodation accommodation) {
