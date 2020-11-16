@@ -1,4 +1,4 @@
-package com.example.BookingApp.accommodation.entity;
+package com.example.BookingApp.accommodation.model;
 
 import javax.persistence.*;
 
