@@ -2,8 +2,8 @@ package com.example.BookingApp.reservation.application;
 
 import com.example.BookingApp.EntityNotFoundException;
 import com.example.BookingApp.accommodation.application.RoomService;
-import com.example.BookingApp.accommodation.entity.Accommodation;
-import com.example.BookingApp.accommodation.entity.Room;
+import com.example.BookingApp.accommodation.model.Accommodation;
+import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.reservation.infrastructure.ReservationRepository;
 import com.example.BookingApp.reservation.model.Reservation;
 import com.example.BookingApp.user.application.UserService;

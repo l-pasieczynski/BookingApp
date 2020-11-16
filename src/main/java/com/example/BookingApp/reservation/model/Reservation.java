@@ -1,7 +1,7 @@
 package com.example.BookingApp.reservation.model;
 
-import com.example.BookingApp.accommodation.entity.Accommodation;
-import com.example.BookingApp.accommodation.entity.Room;
+import com.example.BookingApp.accommodation.model.Accommodation;
+import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

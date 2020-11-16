@@ -1,6 +1,6 @@
 package com.example.BookingApp.accommodation.infrastructure;
 
-import com.example.BookingApp.accommodation.entity.Accommodation;
+import com.example.BookingApp.accommodation.model.Accommodation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
