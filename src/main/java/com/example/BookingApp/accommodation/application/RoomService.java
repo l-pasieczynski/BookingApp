@@ -18,14 +18,17 @@ import java.util.stream.Collectors;
 public class RoomService {
 
     private final RoomRepository roomRepository;
-    private final ReservationService reservationService;
+    private ReservationService reservationService;
 
-    public RoomService(RoomRepository roomRepository, ReservationService reservationService) {
+    public RoomService(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
+    }
+
+    public void setReservationService (ReservationService reservationService){
         this.reservationService = reservationService;
     }
 
-    public List<Room> findAll(){
+    public List<Room> findAll() {
         return roomRepository.findAll();
     }
 
@@ -37,12 +40,6 @@ public class RoomService {
         return roomRepository.findAllByAccommodationOrderByPriceAsc(accommodation);
     }
 
-
-
-    public boolean isAvailableAtDate(LocalDate dateToCheck, Room room) {
-        return dateToCheck.compareTo(reservationService.findWhenRoomAvailable(room)) >= 0;
-    }
-
     public List<Room> findAllFreeRoomByAccommodation(Accommodation accommodation) {
         return findAllByAccommodation(accommodation).stream()
                 .filter(Room::isAvailable)
@@ -50,11 +47,11 @@ public class RoomService {
                 .collect(Collectors.toList());
     }
 
-    public List<Room> findAllFreeRoomByUserSearch(Integer personQuantity, Double minPrice, Double maxPrice, Accommodation accommodation, LocalDate bookIn) {
+    public List<Room> findAllFreeRoomByUserSearch(Integer personQuantity, Double minPrice, Double maxPrice, Accommodation accommodation, LocalDate bookIn, LocalDate bookOut) {
         List<Room> listOfAllSearchedRooms = roomRepository.findByUserQuerySearch(minPrice, maxPrice, accommodation, personQuantity);
 
         List<Room> availableRooms = listOfAllSearchedRooms.stream()
-                .filter(room -> isAvailableAtDate(bookIn, room))
+                .filter(room -> reservationService.isAvailableAtDate(bookIn, room))
                 .collect(Collectors.toList());
 
         List<Room> roomList = availableRooms.stream()
@@ -68,22 +65,23 @@ public class RoomService {
     }
 
     public Room addNewRoom(Room room) {
-        if (findById(room.getId()) == null){
+        if (findById(room.getId()) == null) {
             roomRepository.save(room);
             return room;
-        } return null;
+        }
+        return null;
     }
 
-    public void updateRoom(Long id, Room room){
-        roomRepository.findById(id).map(room1 -> roomRepository.save(room));
+    public void updateRoom(Room room) {
+        roomRepository.findById(room.getId()).map(updateRoom -> roomRepository.save(room));
     }
 
-    public void deleteRoom (Long id){
+    public void deleteRoom(Long id) {
         Room roomToDelete = findById(id);
         roomRepository.delete(roomToDelete);
     }
 
-    public void checkRoomAvailability (LocalDate today){
+    public void setRoomAvailabilityIfReservationEndsToday(LocalDate today) {
 
         List<Reservation> allReservationEndsToday = reservationService.findAllReservationEndsToday(today);
 
@@ -93,8 +91,15 @@ public class RoomService {
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        for (Room room: allRoomsReservationEndsToday) {
-         room.setAvailable(true);
+        for (Room room : allRoomsReservationEndsToday) {
+            room.setAvailable(true);
         }
     }
+
+    public void setRoomAvailable(Room room) {
+        Room roomForAvailability = findById(room.getId());
+        roomForAvailability.setAvailable(true);
+        roomRepository.save(roomForAvailability);
+    }
+
 }

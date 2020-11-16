@@ -3,6 +3,10 @@ package com.example.BookingApp.reservation.model;
 import com.example.BookingApp.accommodation.entity.Accommodation;
 import com.example.BookingApp.accommodation.entity.Room;
 import com.example.BookingApp.user.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -10,6 +14,10 @@ import javax.validation.constraints.Future;
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Reservation {
 
     @Id
@@ -33,11 +41,14 @@ public class Reservation {
     private LocalDate bookOut;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate created;
+    private boolean active;
 
     @PrePersist
     public void create() {
         this.created = LocalDate.now();
     }
+
+    public LocalDate bookIn() {return bookIn;}
 
     public LocalDate bookOut(){
         return bookOut;

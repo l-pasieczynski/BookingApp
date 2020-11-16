@@ -1,7 +1,7 @@
 package com.example.BookingApp.accommodation.entity;
 
-import com.example.BookingApp.reservation.model.Reservation;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class Room {
 
     @Id

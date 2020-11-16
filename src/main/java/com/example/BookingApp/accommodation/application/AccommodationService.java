@@ -5,7 +5,6 @@ import com.example.BookingApp.accommodation.entity.Accommodation;
 import com.example.BookingApp.accommodation.infrastructure.AccommodationRepository;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -20,7 +19,7 @@ public class AccommodationService {
     }
 
     public static Predicate<Accommodation> accommodationName(String name) {
-        return accommodation -> accommodation.getName().startsWith(name);
+        return accommodation -> accommodation.getName().contains(name);
     }
 
     public static Predicate<Accommodation> accommodationCity(String city) {
@@ -36,18 +35,31 @@ public class AccommodationService {
     }
 
     public List<Accommodation> findByNameOrCity(String input) {
-        List<Accommodation> findAccommodationByNameOrCity = findAll().stream()
+        return findAll().stream()
                 .filter(accommodationName(input).or(accommodationCity(input)))
                 .collect(Collectors.toList());
-        return findAccommodationByNameOrCity;
     }
 
     public Accommodation save(Accommodation accommodation) {
-        Accommodation accommodationToSave = findById(accommodation.getId());
-        if (accommodationToSave == null){
+        if (findById(accommodation.getId()) == null) {
             accommodationRepository.save(accommodation);
+            return accommodation;
         }
-            return accommodationToSave;
+        return null;
+    }
+
+    //TODO remove method
+//    public Accommodation save(Accommodation accommodationToSave) {
+//        if (findAll().stream()
+//                .anyMatch(accommodation -> accommodation.getId() == accommodationToSave.getId())) {
+//            return null;
+//        }
+//        accommodationRepository.save(accommodationToSave);
+//        return accommodationToSave;
+//    }
+
+    public void update (Accommodation accommodation){
+        accommodationRepository.save(findById(accommodation.getId()));
     }
 
     public void delete(Accommodation accommodation) {

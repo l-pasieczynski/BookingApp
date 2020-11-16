@@ -18,6 +18,6 @@ public class Scheduler {
     @Scheduled(cron = "0 59 23 * * *")
     public void makeRoomsAvailable (){
         LocalDate today = LocalDate.now();
-        roomService.checkRoomAvailability(today);
+        roomService.setRoomAvailabilityIfReservationEndsToday(today);
     }
 }
