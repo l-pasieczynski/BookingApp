@@ -15,14 +15,28 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        if (userRepository.findByIDNumber(user.getIDNumber()) == null) {
+        User userByIDNum = findByIDNumber(user.getIDNumber());
+        if (userByIDNum == null) {
             userRepository.save(user);
             return user;
         }
-        return userRepository.findByIDNumber(user.getIDNumber());
+        return userByIDNum;
+    }
+
+    public User findByIDNumber(Integer IDNumber) {
+        return userRepository.findByIDNumber(IDNumber);
     }
 
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, User.class.getSimpleName()));
     }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public void updateUser(User user) {
+        userRepository.findById(user.getId()).map(updateUser -> userRepository.save(user));
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.BookingApp.reservation.application;
 
 import com.example.BookingApp.EntityNotFoundException;
+import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.application.RoomService;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
@@ -17,11 +18,13 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final AccommodationService accommodationService;
     private final RoomService roomService;
     private final UserService userService;
 
-    public ReservationService(ReservationRepository reservationRepository, RoomService roomService, UserService userService) {
+    public ReservationService(ReservationRepository reservationRepository, AccommodationService accommodationService, RoomService roomService, UserService userService) {
         this.reservationRepository = reservationRepository;
+        this.accommodationService = accommodationService;
         this.roomService = roomService;
         this.userService = userService;
     }
@@ -42,15 +45,15 @@ public class ReservationService {
         return reservationRepository.findAllByRoomOrderByCreatedDesc(room);
     }
 
-    public List<Reservation> findAllReservationOfAccommodation(Accommodation accommodation){
+    public List<Reservation> findAllReservationOfAccommodation(Accommodation accommodation) {
         return reservationRepository.findAllByAccommodationOrderByCreatedDesc(accommodation);
     }
 
-    public List<Reservation> findAllReservationOfUser (User user){
+    public List<Reservation> findAllReservationOfUser(User user) {
         return reservationRepository.findAllByUserOrderByCreatedDesc(user);
     }
 
-    public Reservation findLastReservationOfRoom (Room room){
+    public Reservation findLastReservationOfRoom(Room room) {
         return reservationRepository.findLastByRoomId(room.getId());
     }
 
@@ -67,13 +70,12 @@ public class ReservationService {
         return reservationRepository.findAllByBookOutEquals(today);
     }
 
-    public Reservation makeReservation(User reservationUser, Room room, LocalDate bookIn, Integer howLong) {
+    public Reservation makeReservation(User reservationUser, Room room, LocalDate bookIn, LocalDate bookOut) {
 
         User user = userService.createUser(reservationUser);
 
         if (isAvailableAtDate(bookIn, room)) {
-            LocalDate bookOut = bookIn.plusDays(howLong);
-            String reservationNumberConcat = LocalDate.now().toString().replaceAll("-", "") + "00" +  user.getId() + "12";
+            String reservationNumberConcat = LocalDate.now().toString().replaceAll("-", "") + "00" + user.getId() + "12";
             Integer reservationNumber = Integer.parseInt(reservationNumberConcat);
 
             Reservation reservation = new Reservation().toBuilder()
@@ -92,8 +94,10 @@ public class ReservationService {
         return null;
     }
 
-    public void cancelReservation(Reservation reservation){
+    public void cancelReservation(Reservation reservation) {
         reservation.toBuilder().active(false).build();
         roomService.setRoomAvailable(reservation.getRoom());
     }
+
+
 }

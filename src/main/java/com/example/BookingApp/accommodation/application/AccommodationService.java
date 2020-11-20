@@ -1,8 +1,10 @@
 package com.example.BookingApp.accommodation.application;
 
 import com.example.BookingApp.EntityNotFoundException;
-import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.infrastructure.AccommodationRepository;
+import com.example.BookingApp.accommodation.model.Accommodation;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class AccommodationService {
 
+    public static final int PAGE_SIZE = 5;
     private final AccommodationRepository accommodationRepository;
 
     public AccommodationService(AccommodationRepository accommodationRepository) {
@@ -28,6 +31,10 @@ public class AccommodationService {
 
     public List<Accommodation> findAll() {
         return accommodationRepository.findAll();
+    }
+
+    public List<Accommodation> findAllAccommodation(int page) {
+        return accommodationRepository.findAllAccommodation(PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Order.desc("name"))));
     }
 
     public Accommodation findById(Long id) {
@@ -48,22 +55,12 @@ public class AccommodationService {
         return null;
     }
 
-    //TODO remove method
-//    public Accommodation save(Accommodation accommodationToSave) {
-//        if (findAll().stream()
-//                .anyMatch(accommodation -> accommodation.getId() == accommodationToSave.getId())) {
-//            return null;
-//        }
-//        accommodationRepository.save(accommodationToSave);
-//        return accommodationToSave;
-//    }
-
-    public void update (Accommodation accommodation){
+    public Accommodation update(Accommodation accommodation) {
         accommodationRepository.save(findById(accommodation.getId()));
+        return accommodation;
     }
 
-    public void delete(Accommodation accommodation) {
-        Accommodation accommodationToDelete = findById(accommodation.getId());
-        accommodationRepository.delete(accommodationToDelete);
+    public void delete(Long id) {
+        accommodationRepository.delete(findById(id));
     }
 }

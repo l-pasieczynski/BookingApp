@@ -14,13 +14,13 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     Reservation findByReservationNumber(Integer reservationNumber);
 
-    Reservation findLastByRoomId (Long roomId);
+    Reservation findLastByRoomId(Long roomId);
 
     List<Reservation> findAllByBookOutEquals(LocalDate today);
 
-    List <Reservation> findAllByRoomOrderByCreatedDesc(Room room);
+    List<Reservation> findAllByRoomOrderByCreatedDesc(Room room);
 
     List<Reservation> findAllByAccommodationOrderByCreatedDesc(Accommodation accommodation);
 
-    List<Reservation> findAllByUserOrderByCreatedDesc (User user);
+    List<Reservation> findAllByUserOrderByCreatedDesc(User user);
 }

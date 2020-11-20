@@ -20,4 +20,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             "(:accommodation is null or r.accommodation = :accommodation) and" +
             "(:maxPerson is null or r.maxPerson >= :personQuantity)")
     List<Room> findByUserQuerySearch(Double minPrice, Double maxPrice, Accommodation accommodation, Integer personQuantity);
+
+    List<Room> findAllByAccommodationIdIn(List<Long> ids);
 }
