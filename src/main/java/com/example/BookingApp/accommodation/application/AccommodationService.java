@@ -7,7 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -62,5 +64,18 @@ public class AccommodationService {
 
     public void delete(Long id) {
         accommodationRepository.delete(findById(id));
+    }
+
+    public List<Accommodation> getRandomAccommodation() {
+        List<Accommodation> randomAccommodationList = new ArrayList<>();
+        Random random = new Random();
+        int i = 0;
+        int size = accommodationRepository.findAll().size();
+        while (i < 5) {
+            int randomInt = random.nextInt(size);
+            randomAccommodationList.add(findById(Long.valueOf(randomInt)));
+            i++;
+        }
+        return randomAccommodationList;
     }
 }
