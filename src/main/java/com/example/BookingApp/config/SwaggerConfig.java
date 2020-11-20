@@ -1,4 +1,4 @@
-package com.example.BookingApp.Config;
+package com.example.BookingApp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
