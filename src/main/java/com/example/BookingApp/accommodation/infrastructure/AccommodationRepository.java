@@ -13,8 +13,4 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
 
     @Query("SELECT a from Accommodation a ORDER BY a.name DESC ")
     List<Accommodation> findAllAccommodation(Pageable page);
-
-    Accommodation getRandom();
-
-
 }
