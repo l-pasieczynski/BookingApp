@@ -1,9 +1,10 @@
 package com.example.BookingApp.accommodation.application;
 
 import com.example.BookingApp.EntityNotFoundException;
+import com.example.BookingApp.accommodation.dto.RoomDto;
+import com.example.BookingApp.accommodation.infrastructure.RoomRepository;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
-import com.example.BookingApp.accommodation.infrastructure.RoomRepository;
 import com.example.BookingApp.reservation.application.ReservationService;
 import com.example.BookingApp.reservation.model.Reservation;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,15 @@ import java.util.stream.Collectors;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final AccommodationService accommodationService;
     private ReservationService reservationService;
 
-    public RoomService(RoomRepository roomRepository) {
+    public RoomService(RoomRepository roomRepository, AccommodationService accommodationService) {
         this.roomRepository = roomRepository;
+        this.accommodationService = accommodationService;
     }
 
-    public void setReservationService (ReservationService reservationService){
+    public void setReservationService(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 
@@ -64,12 +67,21 @@ public class RoomService {
         return roomList;
     }
 
-    public Room addNewRoom(Room room) {
-        if (findById(room.getId()) == null) {
-            roomRepository.save(room);
-            return room;
+//    public Room addNewRoom(Room room) {
+//        if (findById(room.getId()) == null) {
+//            roomRepository.save(room);
+//            return room;
+//        }
+//        return null;
+//    }
+
+    public Room addNewRoom(Room roomToSave, Accommodation accommodation) {
+        if (findAllByAccommodation(accommodation).stream()
+                .anyMatch(room -> room.getId().equals(roomToSave.getId()))) {
+            return null;
         }
-        return null;
+        roomRepository.save(roomToSave);
+        return roomToSave;
     }
 
     public void updateRoom(Room room) {
@@ -101,5 +113,4 @@ public class RoomService {
         roomForAvailability.setAvailable(true);
         roomRepository.save(roomForAvailability);
     }
-
 }

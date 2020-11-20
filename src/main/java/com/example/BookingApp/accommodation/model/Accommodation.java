@@ -28,5 +28,6 @@ public class Accommodation {
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = AccommodationAddInfo.class)
     private List<AccommodationAddInfo> accommodationAddInfo;
+    private Long ReservationId;
 
 }

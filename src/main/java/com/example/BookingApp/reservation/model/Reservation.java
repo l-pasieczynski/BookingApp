@@ -25,13 +25,13 @@ public class Reservation {
     private Long id;
     private Integer reservationNumber;
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
     @OneToOne
-    @JoinColumn(name="accommodation_id")
+    @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
     @OneToOne
-    @JoinColumn(name="room_id")
+    @JoinColumn(name = "room_id")
     private Room room;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Future
@@ -48,9 +48,11 @@ public class Reservation {
         this.created = LocalDate.now();
     }
 
-    public LocalDate bookIn() {return bookIn;}
+    public LocalDate bookIn() {
+        return bookIn;
+    }
 
-    public LocalDate bookOut(){
+    public LocalDate bookOut() {
         return bookOut;
     }
 

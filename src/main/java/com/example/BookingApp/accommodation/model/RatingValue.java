@@ -5,5 +5,5 @@ public enum RatingValue {
     NICE,
     OK,
     GOOD,
-    GREAT;
+    GREAT
 }
