@@ -21,9 +21,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/")
                 .permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/h2-console/**")
+                .permitAll()
                 .antMatchers("/admin/**")
                 .hasAuthority("ADMIN")
                 .and().exceptionHandling().accessDeniedPage("/403");
+
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 
 }
