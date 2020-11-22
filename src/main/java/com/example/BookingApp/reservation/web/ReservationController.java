@@ -7,8 +7,9 @@ import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.reservation.application.ReservationService;
 import com.example.BookingApp.reservation.model.Reservation;
 import com.example.BookingApp.user.application.UserService;
-import com.example.BookingApp.user.model.User;
+import com.example.BookingApp.user.dto.UserRegistrationData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -25,7 +27,7 @@ public class ReservationController {
     private final AccommodationService accommodationService;
 
     @PostMapping("/accommodation/{accommodationId}/room/{roomId}/reservation")
-    public Reservation makeReservation(@RequestBody User user, @PathVariable Long roomId,
+    public Reservation makeReservation(@RequestBody UserRegistrationData user, @PathVariable Long roomId,
                                        @RequestParam LocalDate bookIn, @RequestParam LocalDate bookOut) {
 
         Room roomForReservation = roomService.findById(roomId);

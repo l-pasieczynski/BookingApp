@@ -1,26 +1,30 @@
 package com.example.BookingApp.user.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private String username;
     @Email
+    @NotBlank
     private String email;
     @Column(nullable = false)
+    @NotBlank
     private String password;
     @Column(unique = true, nullable = false)
     private Integer IDNumber;

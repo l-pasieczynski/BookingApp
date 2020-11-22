@@ -22,5 +22,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findAllByAccommodationOrderByCreatedDesc(Accommodation accommodation);
 
-    List<Reservation> findAllByUserOrderByCreatedDesc(User user);
+    List<Reservation> findAllByUserIdOrderByCreatedDesc(Long userId);
 }

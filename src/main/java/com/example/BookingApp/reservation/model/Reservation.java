@@ -2,6 +2,7 @@ package com.example.BookingApp.reservation.model;
 
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
+import com.example.BookingApp.reservation.validator.ReservationNumber;
 import com.example.BookingApp.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,10 +24,9 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ReservationNumber
     private Integer reservationNumber;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long userId;
     @OneToOne
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;

@@ -9,6 +9,8 @@ import com.example.BookingApp.reservation.infrastructure.ReservationRepository;
 import com.example.BookingApp.reservation.model.Reservation;
 import com.example.BookingApp.user.application.UserService;
 import com.example.BookingApp.user.model.User;
+import com.example.BookingApp.user.dto.UserDomainModel;
+import com.example.BookingApp.user.dto.UserRegistrationData;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -50,7 +52,7 @@ public class ReservationService {
     }
 
     public List<Reservation> findAllReservationOfUser(User user) {
-        return reservationRepository.findAllByUserOrderByCreatedDesc(user);
+        return reservationRepository.findAllByUserIdOrderByCreatedDesc(user.getId());
     }
 
     public Reservation findLastReservationOfRoom(Room room) {
@@ -70,9 +72,9 @@ public class ReservationService {
         return reservationRepository.findAllByBookOutEquals(today);
     }
 
-    public Reservation makeReservation(User reservationUser, Room room, LocalDate bookIn, LocalDate bookOut) {
+    public Reservation makeReservation(UserRegistrationData reservationUser, Room room, LocalDate bookIn, LocalDate bookOut) {
 
-        User user = userService.createUser(reservationUser);
+        UserDomainModel user = checkIsUserAlreadyRegistered(reservationUser);
 
         if (isAvailableAtDate(bookIn, room)) {
             String reservationNumberConcat = LocalDate.now().toString().replaceAll("-", "") + "00" + user.getId() + "12";
@@ -84,7 +86,7 @@ public class ReservationService {
                     .bookIn(bookIn)
                     .bookOut(bookOut)
                     .room(room)
-                    .user(user)
+                    .userId(user.getId())
                     .active(true)
                     .build();
 
@@ -92,6 +94,14 @@ public class ReservationService {
             return reservation;
         }
         return null;
+    }
+
+    private UserDomainModel checkIsUserAlreadyRegistered(UserRegistrationData reservationUser) {
+        UserDomainModel user = userService.findByIDNumber(reservationUser.getIDNumber());
+        if (user == null) {
+            return userService.createUser(reservationUser);
+        }
+        return user;
     }
 
     public void cancelReservation(Reservation reservation) {
