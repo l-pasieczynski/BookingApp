@@ -1,0 +1,5 @@
+INSERT INTO TEST VALUES(1, 'Hello');
+INSERT INTO TEST VALUES(2, 'World');
+
+INSERT INTO role (`id`, `name`) VALUES (NULL, 'ADMIN');
+INSERT INTO role (`id`, `name`) VALUES (NULL, 'USER');
