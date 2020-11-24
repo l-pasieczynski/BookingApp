@@ -103,32 +103,29 @@ public class ReservationService {
 
     public void cancelReservation(Reservation reservation) {
         reservation.toBuilder().active(false).build();
-        setRoomAvailable(reservation.roomId());
     }
 
     public void setRoomAvailabilityIfReservationEndsToday(LocalDate today) {
 
         List<Reservation> allReservationEndsToday = findAllReservationEndsToday(today);
 
-        List<Room> allRoomsReservationEndsToday = allReservationEndsToday.stream()
-                .map(reservation -> roomService.findById(reservation.roomId()))
-                .collect(Collectors.toList());
-
-        for (Room room : allRoomsReservationEndsToday) {
-            room.setAvailable(true);
+        for (Reservation reservation : allReservationEndsToday) {
+            reservationRepository.delete(reservation);
         }
-    }
-
-    public void setRoomAvailable(Long roomId) {
-        Room roomForAvailability = roomService.findById(roomId);
-        roomForAvailability.setAvailable(true);
-        roomService.updateRoom(roomForAvailability);
     }
 
     public List<Room> findAllFreeRoomByAccommodation(Long accommodationId) {
         return roomService.findAllByAccommodation(accommodationId).stream()
-                .filter(Room::isAvailable)
+                .filter(room -> findAvailableRoomId(accommodationId).contains(room.getId()))
                 .sorted(Comparator.comparing(Room::getPrice))
+                .collect(Collectors.toList());
+    }
+
+    private List<Long> findAvailableRoomId(Long accommodationId) {
+        return reservationRepository.findAllByAccommodationIdOrderByCreatedDesc(accommodationId)
+                .stream()
+                .filter(reservation -> !reservation.isActive())
+                .map(Reservation::getRoomId)
                 .collect(Collectors.toList());
     }
 

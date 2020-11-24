@@ -26,7 +26,6 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private RoomStandard roomStandard;
     private String description;
-    private boolean available;
     private Long accommodationId;
 
 

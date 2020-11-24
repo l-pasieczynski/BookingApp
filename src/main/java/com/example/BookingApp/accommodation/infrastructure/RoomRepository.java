@@ -10,9 +10,8 @@ import java.util.List;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    List<Room> findAllByAccommodationIdOrderByPriceAsc(Long accommodationId);
 
-    List<Room> findAllByAccommodationIdAndAvailableOrderByPriceAsc(Long accommodationId, boolean available);
+    List<Room> findAllByAccommodationIdOrderByPriceAsc(Long accommodationId);
 
     @Query("SELECT r FROM Room r WHERE " +
             "(:price is null or r.price >= :minPrice) and " +

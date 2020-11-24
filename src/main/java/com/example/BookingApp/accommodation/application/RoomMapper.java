@@ -20,7 +20,6 @@ public class RoomMapper {
                 .priceEuro(room.getPrice() / euro)
                 .roomStandard(room.getRoomStandard().toString())
                 .description(room.getDescription())
-                .available(room.isAvailable())
                 .firstAvailableDate(availability)
                 .build();
     }
