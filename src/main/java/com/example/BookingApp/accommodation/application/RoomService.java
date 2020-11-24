@@ -1,6 +1,5 @@
 package com.example.BookingApp.accommodation.application;
 
-import com.example.BookingApp.EntityNotFoundException;
 import com.example.BookingApp.accommodation.infrastructure.RoomRepository;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
