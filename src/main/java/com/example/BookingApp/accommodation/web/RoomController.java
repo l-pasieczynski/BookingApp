@@ -8,6 +8,7 @@ import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.errors.ErrorResponse;
 import com.example.BookingApp.exception.UnauthorizedException;
+import com.example.BookingApp.currency.application.CurrencyService;
 import com.example.BookingApp.reservation.application.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class RoomController {
     private final AccommodationService accommodationService;
     private final RoomService roomService;
     private final ReservationService reservationService;
+    private final CurrencyService currencyService;
 
 
     @GetMapping("/accommodation/{accommodationId}/room")
@@ -49,7 +51,9 @@ public class RoomController {
         Accommodation accommodation = accommodationService.findById(accommodationId);
         Room room = roomService.findById(roomId);
         LocalDate roomAvailability = reservationService.findWhenRoomAvailable(room);
-        return RoomDtoMapper.mapToRoomDto(accommodation, room, roomAvailability);
+        Double dollarValue = currencyService.midDollarValue();
+        Double euroValue = currencyService.midEuroValue();
+        return RoomDtoMapper.mapToRoomDto(accommodation, room, roomAvailability, dollarValue, euroValue);
     }
 
     @GetMapping("/searchRoom")
