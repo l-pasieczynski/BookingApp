@@ -1,6 +1,6 @@
 package com.example.BookingApp.accommodation.application;
 
-import com.example.BookingApp.EntityNotFoundException;
+import com.example.BookingApp.exception.EntityNotFoundException;
 import com.example.BookingApp.accommodation.infrastructure.AccommodationRepository;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import org.springframework.data.domain.PageRequest;

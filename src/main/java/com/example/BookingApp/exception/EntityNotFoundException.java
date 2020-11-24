@@ -1,4 +1,4 @@
-package com.example.BookingApp;
+package com.example.BookingApp.exception;
 
 public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException(Long id, String className) {

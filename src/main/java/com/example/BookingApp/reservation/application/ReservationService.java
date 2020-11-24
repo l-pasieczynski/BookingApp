@@ -1,14 +1,15 @@
 package com.example.BookingApp.reservation.application;
 
-import com.example.BookingApp.EntityNotFoundException;
+import com.example.BookingApp.exception.EntityNotFoundException;
 import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.application.RoomService;
-import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.reservation.infrastructure.ReservationRepository;
 import com.example.BookingApp.reservation.model.Reservation;
 import com.example.BookingApp.user.application.UserService;
 import com.example.BookingApp.user.model.User;
+import com.example.BookingApp.user.dto.UserDomainModel;
+import com.example.BookingApp.user.dto.UserRegistrationData;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -45,12 +46,12 @@ public class ReservationService {
         return reservationRepository.findAllByRoomOrderByCreatedDesc(room);
     }
 
-    public List<Reservation> findAllReservationOfAccommodation(Accommodation accommodation) {
-        return reservationRepository.findAllByAccommodationOrderByCreatedDesc(accommodation);
+    public List<Reservation> findAllReservationOfAccommodation(Long accommodationId) {
+        return reservationRepository.findAllByAccommodationIdOrderByCreatedDesc(accommodationId);
     }
 
     public List<Reservation> findAllReservationOfUser(User user) {
-        return reservationRepository.findAllByUserOrderByCreatedDesc(user);
+        return reservationRepository.findAllByUserIdOrderByCreatedDesc(user.getId());
     }
 
     public Reservation findLastReservationOfRoom(Room room) {
@@ -70,21 +71,21 @@ public class ReservationService {
         return reservationRepository.findAllByBookOutEquals(today);
     }
 
-    public Reservation makeReservation(User reservationUser, Room room, LocalDate bookIn, LocalDate bookOut) {
+    public Reservation makeReservation(UserRegistrationData reservationUser,Long accommodationId, Room room, LocalDate bookIn, LocalDate bookOut) {
 
-        User user = userService.createUser(reservationUser);
+        UserDomainModel user = checkIsUserAlreadyRegistered(reservationUser);
 
         if (isAvailableAtDate(bookIn, room)) {
             String reservationNumberConcat = LocalDate.now().toString().replaceAll("-", "") + "00" + user.getId() + "12";
             Integer reservationNumber = Integer.parseInt(reservationNumberConcat);
 
             Reservation reservation = new Reservation().toBuilder()
-                    .accommodation(room.getAccommodation())
+                    .accommodationId(accommodationId)
                     .reservationNumber(reservationNumber)
                     .bookIn(bookIn)
                     .bookOut(bookOut)
                     .room(room)
-                    .user(user)
+                    .userId(user.getId())
                     .active(true)
                     .build();
 
@@ -92,6 +93,14 @@ public class ReservationService {
             return reservation;
         }
         return null;
+    }
+
+    private UserDomainModel checkIsUserAlreadyRegistered(UserRegistrationData reservationUser) {
+        UserDomainModel user = userService.findByIDNumber(reservationUser.getIDNumber());
+        if (user == null) {
+            return userService.createUser(reservationUser);
+        }
+        return user;
     }
 
     public void cancelReservation(Reservation reservation) {

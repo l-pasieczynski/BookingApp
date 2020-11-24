@@ -1,23 +1,30 @@
 package com.example.BookingApp.accommodation.web;
 
-import com.example.BookingApp.UnauthorizedException;
 import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.application.RoomService;
 import com.example.BookingApp.accommodation.dto.RoomDto;
 import com.example.BookingApp.accommodation.dto.RoomDtoMapper;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
+import com.example.BookingApp.errors.ErrorResponse;
+import com.example.BookingApp.exception.UnauthorizedException;
 import com.example.BookingApp.reservation.application.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Future;
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class RoomController {
 
     private final AccommodationService accommodationService;
@@ -51,23 +58,29 @@ public class RoomController {
                                                @RequestParam Double maxPrice,
                                                @RequestParam Accommodation accommodation,
                                                @RequestParam LocalDate bookIn,
-                                               @RequestParam LocalDate bookOut) {
+                                               @RequestParam @Future LocalDate bookOut) {
         return roomService.findAllFreeRoomByUserSearch(personQuantity, minPrice, maxPrice, accommodation, bookIn, bookOut);
     }
 
     @PostMapping("/admin/accommodation/{accommodationId}/addRoom")
-    public Room addRoom(@RequestBody Room newRoom, @PathVariable Long accommodationId) {
+    public ResponseEntity<Object> addRoom(@RequestBody @Valid Room newRoom, @PathVariable Long accommodationId, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ErrorResponse.generateErrorList(bindingResult);
+        }
         if (checkAdminAuthority()) {
             Accommodation accommodationOfNewRoom = accommodationService.findById(accommodationId);
-            return roomService.addNewRoom(newRoom, accommodationOfNewRoom);
+            return ResponseEntity.ok(roomService.addNewRoom(newRoom, accommodationOfNewRoom));
         }
         throw new UnauthorizedException();
     }
 
     @PutMapping("/admin/accommodation/{accommodationId}/room/{roomId}")
-    public void editRoom(@PathVariable("roomId") Long id) {
+    public ResponseEntity<Object>  editRoom(@PathVariable("roomId") Long id, @RequestBody @Valid Room room, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            return ErrorResponse.generateErrorList(bindingResult);
+        }
         if (checkAdminAuthority()) {
-            roomService.updateRoom(roomService.findById(id));
+            return ResponseEntity.ok(roomService.updateRoom(roomService.findById(id)));
         }
         throw new UnauthorizedException();
     }
