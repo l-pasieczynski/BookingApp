@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -50,11 +51,12 @@ public class AccommodationService {
     }
 
     public Accommodation save(Accommodation accommodation) {
+
         if (findById(accommodation.getId()) == null) {
             accommodationRepository.save(accommodation);
             return accommodation;
         }
-        return null;
+        throw new EntityExistsException();
     }
 
     public Accommodation update(Accommodation accommodation) {

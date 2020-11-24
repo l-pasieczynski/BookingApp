@@ -9,6 +9,7 @@ import com.example.BookingApp.reservation.model.Reservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -65,7 +66,7 @@ public class RoomService {
     public Room addNewRoom(Room roomToSave, Accommodation accommodation) {
         if (findAllByAccommodation(accommodation).stream()
                 .anyMatch(room -> room.getId().equals(roomToSave.getId()))) {
-            return null;
+            throw new EntityExistsException();
         }
         roomRepository.save(roomToSave);
         return roomToSave;

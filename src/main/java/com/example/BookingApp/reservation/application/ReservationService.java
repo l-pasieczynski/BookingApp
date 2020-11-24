@@ -12,6 +12,7 @@ import com.example.BookingApp.user.dto.UserDomainModel;
 import com.example.BookingApp.user.dto.UserRegistrationData;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class ReservationService {
             reservationRepository.save(reservation);
             return reservation;
         }
-        return null;
+        throw new EntityExistsException();
     }
 
     private UserDomainModel checkIsUserAlreadyRegistered(UserRegistrationData reservationUser) {
