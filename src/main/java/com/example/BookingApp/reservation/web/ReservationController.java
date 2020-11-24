@@ -7,7 +7,7 @@ import com.example.BookingApp.exception.UnauthorizedException;
 import com.example.BookingApp.reservation.application.ReservationService;
 import com.example.BookingApp.reservation.model.Reservation;
 import com.example.BookingApp.user.application.UserService;
-import com.example.BookingApp.user.dto.UserRegistrationData;
+import com.example.BookingApp.user.application.UserRegistrationData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

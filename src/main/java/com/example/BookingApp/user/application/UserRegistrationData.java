@@ -1,4 +1,4 @@
-package com.example.BookingApp.user.dto;
+package com.example.BookingApp.user.application;
 
 import com.example.BookingApp.user.model.Role;
 import lombok.Getter;

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AccommodationData {
+public class AccommodationDomainData {
 
     private Long id;
     private String name;

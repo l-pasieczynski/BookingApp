@@ -30,6 +30,7 @@ public class Reservation {
     private Long accommodationId;
     @NotBlank
     private Long roomId;
+    private Double price;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Future
     private LocalDate bookIn;

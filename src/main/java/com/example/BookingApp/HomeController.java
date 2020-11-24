@@ -1,8 +1,8 @@
 package com.example.BookingApp;
 
 import com.example.BookingApp.accommodation.application.AccommodationService;
-import com.example.BookingApp.accommodation.application.AccommodationData;
-import com.example.BookingApp.accommodation.application.AccommodationDataMapper;
+import com.example.BookingApp.accommodation.application.AccommodationDomainData;
+import com.example.BookingApp.accommodation.application.AccommodationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +16,8 @@ public class HomeController {
     private final AccommodationService accommodationService;
 
     @GetMapping
-    public List<AccommodationData> getRandomAccommodation() {
-        return AccommodationDataMapper.mapToAccommodationDtos(accommodationService.getRandomAccommodation());
+    public List<AccommodationDomainData> getRandomAccommodation() {
+        return AccommodationMapper.mapToAccommodationDtos(accommodationService.getRandomAccommodation());
     }
 
 }

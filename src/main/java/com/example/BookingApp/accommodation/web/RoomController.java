@@ -2,8 +2,8 @@ package com.example.BookingApp.accommodation.web;
 
 import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.application.RoomService;
-import com.example.BookingApp.accommodation.application.RoomData;
-import com.example.BookingApp.accommodation.application.RoomDataMapper;
+import com.example.BookingApp.accommodation.application.RoomDomainData;
+import com.example.BookingApp.accommodation.application.RoomMapper;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.currency.application.CurrencyService;
@@ -45,14 +45,14 @@ public class RoomController {
     }
 
     @GetMapping("/accommodation/{accommodationId}/room/{roomId}")
-    public RoomData getRoom(@PathVariable Long accommodationId,
-                            @PathVariable Long roomId) {
+    public RoomDomainData getRoom(@PathVariable Long accommodationId,
+                                  @PathVariable Long roomId) {
         Accommodation accommodation = accommodationService.findById(accommodationId);
         Room room = roomService.findById(roomId);
         LocalDate roomAvailability = reservationService.findWhenRoomAvailable(room);
         Double dollarValue = currencyService.midDollarValue();
         Double euroValue = currencyService.midEuroValue();
-        return RoomDataMapper.mapToRoomDto(accommodation, room, roomAvailability, dollarValue, euroValue);
+        return RoomMapper.mapToRoomDomain(accommodation, room, roomAvailability, dollarValue, euroValue);
     }
 
     @GetMapping("/searchRoom")

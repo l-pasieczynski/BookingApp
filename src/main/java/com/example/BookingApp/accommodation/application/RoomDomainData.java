@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class RoomData {
+public class RoomDomainData {
 
     private String accommodationName;
     private Integer roomSize;

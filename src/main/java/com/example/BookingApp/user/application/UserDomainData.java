@@ -1,4 +1,4 @@
-package com.example.BookingApp.user.dto;
+package com.example.BookingApp.user.application;
 
 import com.example.BookingApp.user.model.Role;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Getter
 @Builder
-public class UserDomainModel {
+public class UserDomainData {
 
     private Long id;
     private String username;

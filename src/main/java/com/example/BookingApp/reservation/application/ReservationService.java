@@ -8,8 +8,8 @@ import com.example.BookingApp.reservation.infrastructure.ReservationRepository;
 import com.example.BookingApp.reservation.model.Reservation;
 import com.example.BookingApp.user.application.UserService;
 import com.example.BookingApp.user.model.User;
-import com.example.BookingApp.user.dto.UserDomainModel;
-import com.example.BookingApp.user.dto.UserRegistrationData;
+import com.example.BookingApp.user.application.UserDomainData;
+import com.example.BookingApp.user.application.UserRegistrationData;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -74,7 +74,7 @@ public class ReservationService {
 
     public Reservation makeReservation(UserRegistrationData reservationUser,Long accommodationId, Room room, LocalDate bookIn, LocalDate bookOut) {
 
-        UserDomainModel user = checkIsUserAlreadyRegistered(reservationUser);
+        UserDomainData user = checkIsUserAlreadyRegistered(reservationUser);
 
         if (isAvailableAtDate(bookIn, room)) {
             String reservationNumberConcat = LocalDate.now().toString().replaceAll("-", "") + "00" + user.getId() + "12";
@@ -96,8 +96,8 @@ public class ReservationService {
         throw new EntityExistsException();
     }
 
-    private UserDomainModel checkIsUserAlreadyRegistered(UserRegistrationData reservationUser) {
-        UserDomainModel user = userService.findByIDNumber(reservationUser.getIDNumber());
+    private UserDomainData checkIsUserAlreadyRegistered(UserRegistrationData reservationUser) {
+        UserDomainData user = userService.findByIDNumber(reservationUser.getIDNumber());
         if (user == null) {
             return userService.createUser(reservationUser);
         }
