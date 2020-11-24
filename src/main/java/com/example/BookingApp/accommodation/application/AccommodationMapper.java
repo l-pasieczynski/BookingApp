@@ -25,7 +25,7 @@ public class AccommodationMapper {
                 .build();
     }
 
-    public static Accommodation mapToAccommodationEntity(AccommodationRegistrationData accommodationRegistrationData){
+    public static Accommodation mapToAccommodationEntity(AccommodationRegistrationData accommodationRegistrationData) {
         return Accommodation.builder()
                 .name(accommodationRegistrationData.getName())
                 .city(accommodationRegistrationData.getCity())

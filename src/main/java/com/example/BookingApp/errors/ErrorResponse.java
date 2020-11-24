@@ -19,7 +19,7 @@ public class ErrorResponse {
     private String errorContent;
     private List<String> messages;
 
-    public static ResponseEntity<Object> generateErrorList(BindingResult bindingResult){
+    public static ResponseEntity<Object> generateErrorList(BindingResult bindingResult) {
         List<String> errors = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
         return ResponseEntity.ok(new ErrorResponse("404", "Validation failure", errors));
     }

@@ -1,35 +1,32 @@
 package com.example.BookingApp.reservation.application;
 
-import com.example.BookingApp.exception.EntityNotFoundException;
-import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.application.RoomService;
+import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
+import com.example.BookingApp.exception.EntityNotFoundException;
 import com.example.BookingApp.reservation.infrastructure.ReservationRepository;
 import com.example.BookingApp.reservation.model.Reservation;
-import com.example.BookingApp.user.application.UserService;
-import com.example.BookingApp.user.model.User;
 import com.example.BookingApp.user.application.UserDomainData;
 import com.example.BookingApp.user.application.UserRegistrationData;
+import com.example.BookingApp.user.application.UserService;
+import com.example.BookingApp.user.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final AccommodationService accommodationService;
     private final RoomService roomService;
     private final UserService userService;
 
-    public ReservationService(ReservationRepository reservationRepository, AccommodationService accommodationService, RoomService roomService, UserService userService) {
-        this.reservationRepository = reservationRepository;
-        this.accommodationService = accommodationService;
-        this.roomService = roomService;
-        this.userService = userService;
-    }
 
     public List<Reservation> findAll() {
         return reservationRepository.findAll();
@@ -72,7 +69,7 @@ public class ReservationService {
         return reservationRepository.findAllByBookOutEquals(today);
     }
 
-    public Reservation makeReservation(UserRegistrationData reservationUser,Long accommodationId, Room room, LocalDate bookIn, LocalDate bookOut) {
+    public Reservation makeReservation(UserRegistrationData reservationUser, Long accommodationId, Room room, LocalDate bookIn, LocalDate bookOut) {
 
         UserDomainData user = checkIsUserAlreadyRegistered(reservationUser);
 
@@ -106,7 +103,50 @@ public class ReservationService {
 
     public void cancelReservation(Reservation reservation) {
         reservation.toBuilder().active(false).build();
-        roomService.setRoomAvailable(reservation.roomId());
+        setRoomAvailable(reservation.roomId());
+    }
+
+    public void setRoomAvailabilityIfReservationEndsToday(LocalDate today) {
+
+        List<Reservation> allReservationEndsToday = findAllReservationEndsToday(today);
+
+        List<Room> allRoomsReservationEndsToday = allReservationEndsToday.stream()
+                .map(reservation -> roomService.findById(reservation.roomId()))
+                .collect(Collectors.toList());
+
+        for (Room room : allRoomsReservationEndsToday) {
+            room.setAvailable(true);
+        }
+    }
+
+    public void setRoomAvailable(Long roomId) {
+        Room roomForAvailability = roomService.findById(roomId);
+        roomForAvailability.setAvailable(true);
+        roomService.updateRoom(roomForAvailability);
+    }
+
+    public List<Room> findAllFreeRoomByAccommodation(Long accommodationId) {
+        return roomService.findAllByAccommodation(accommodationId).stream()
+                .filter(Room::isAvailable)
+                .sorted(Comparator.comparing(Room::getPrice))
+                .collect(Collectors.toList());
+    }
+
+    public List<Room> findAllFreeRoomByUserSearch(Integer personQuantity, Double minPrice, Double maxPrice, Accommodation accommodation, LocalDate bookIn, LocalDate bookOut) {
+        List<Room> listOfAllSearchedRooms = roomService.findByUserQuerySearch(minPrice, maxPrice, accommodation, personQuantity);
+
+        List<Room> availableRooms = listOfAllSearchedRooms.stream()
+                .filter(room -> isAvailableAtDate(bookIn, room))
+                .collect(Collectors.toList());
+
+        List<Room> roomList = availableRooms.stream()
+                .filter(room -> room.getMaxPerson().equals(personQuantity))
+                .collect(Collectors.toList());
+
+        if (roomList.isEmpty()) {
+            return availableRooms;
+        }
+        return roomList;
     }
 
 

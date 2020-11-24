@@ -8,7 +8,7 @@ public class UserMapper {
     private UserMapper() {
     }
 
-    public static UserDomainData mapToDomainUser (User user){
+    public static UserDomainData mapToDomainUser(User user) {
         return UserDomainData.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -19,7 +19,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static User mapToUserEntity(UserRegistrationData userRegistrationData){
+    public static User mapToUserEntity(UserRegistrationData userRegistrationData) {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 

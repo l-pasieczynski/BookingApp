@@ -1,9 +1,9 @@
 package com.example.BookingApp.accommodation.web;
 
 import com.example.BookingApp.accommodation.application.AccommodationService;
-import com.example.BookingApp.accommodation.application.RoomService;
 import com.example.BookingApp.accommodation.application.RoomDomainData;
 import com.example.BookingApp.accommodation.application.RoomMapper;
+import com.example.BookingApp.accommodation.application.RoomService;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.currency.application.CurrencyService;
@@ -41,7 +41,7 @@ public class RoomController {
 
     @GetMapping("/accommodation/{accommodationId}/available")
     public List<Room> getAllAvailableRoomsOfAccommodation(@PathVariable("accommodationId") Long id) {
-        return roomService.findAllFreeRoomByAccommodation(id);
+        return reservationService.findAllFreeRoomByAccommodation(id);
     }
 
     @GetMapping("/accommodation/{accommodationId}/room/{roomId}")
@@ -62,7 +62,7 @@ public class RoomController {
                                                @RequestParam Accommodation accommodation,
                                                @RequestParam LocalDate bookIn,
                                                @RequestParam @Future LocalDate bookOut) {
-        return roomService.findAllFreeRoomByUserSearch(personQuantity, minPrice, maxPrice, accommodation, bookIn, bookOut);
+        return reservationService.findAllFreeRoomByUserSearch(personQuantity, minPrice, maxPrice, accommodation, bookIn, bookOut);
     }
 
     @PostMapping("/admin/accommodation/{accommodationId}/addRoom")

@@ -9,7 +9,7 @@ public class ReservationMapper {
     private ReservationMapper() {
     }
 
-    public static ReservationDomainData mapToDomainReservation(Reservation reservation, User user, Room room){
+    public static ReservationDomainData mapToDomainReservation(Reservation reservation, User user, Room room) {
         return ReservationDomainData.builder()
                 .reservationNumber(reservation.getReservationNumber())
                 .accommodationId(reservation.getAccommodationId())
@@ -25,7 +25,7 @@ public class ReservationMapper {
                 .build();
     }
 
-    public static Reservation mapToReservationEntity(ReservationRegistrationData reservationRegistrationData, User user, Integer reservationNumber, Double price){
+    public static Reservation mapToReservationEntity(ReservationRegistrationData reservationRegistrationData, User user, Integer reservationNumber, Double price) {
         return Reservation.builder()
                 .accommodationId(reservationRegistrationData.getAccommodationId())
                 .roomId(reservationRegistrationData.getRoomId())

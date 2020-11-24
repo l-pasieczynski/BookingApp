@@ -1,8 +1,8 @@
 package com.example.BookingApp;
 
-import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.application.AccommodationDomainData;
 import com.example.BookingApp.accommodation.application.AccommodationMapper;
+import com.example.BookingApp.accommodation.application.AccommodationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

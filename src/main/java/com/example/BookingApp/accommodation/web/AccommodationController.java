@@ -1,8 +1,8 @@
 package com.example.BookingApp.accommodation.web;
 
-import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.application.AccommodationDomainData;
 import com.example.BookingApp.accommodation.application.AccommodationMapper;
+import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.errors.ErrorResponse;
 import com.example.BookingApp.exception.UnauthorizedException;

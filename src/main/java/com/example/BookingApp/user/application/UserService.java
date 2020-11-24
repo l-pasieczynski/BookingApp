@@ -3,7 +3,8 @@ package com.example.BookingApp.user.application;
 import com.example.BookingApp.exception.EntityNotFoundException;
 import com.example.BookingApp.user.infrastructure.RoleRepository;
 import com.example.BookingApp.user.infrastructure.UserRepository;
-import com.example.BookingApp.user.model.*;
+import com.example.BookingApp.user.model.Role;
+import com.example.BookingApp.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

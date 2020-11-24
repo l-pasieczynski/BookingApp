@@ -16,8 +16,8 @@ public class RoomMapper {
                 .roomSize(room.getRoomSize())
                 .maxPerson(room.getMaxPerson())
                 .price(room.getPrice())
-                .priceUSD(room.getPrice()/dollar)
-                .priceEuro(room.getPrice()/euro)
+                .priceUSD(room.getPrice() / dollar)
+                .priceEuro(room.getPrice() / euro)
                 .roomStandard(room.getRoomStandard().toString())
                 .description(room.getDescription())
                 .available(room.isAvailable())
@@ -25,7 +25,7 @@ public class RoomMapper {
                 .build();
     }
 
-    public static Room mapToRoomEntity(RoomRegistrationData roomRegistrationData, Long accommodationId){
+    public static Room mapToRoomEntity(RoomRegistrationData roomRegistrationData, Long accommodationId) {
         return Room.builder()
                 .accommodationId(accommodationId)
                 .price(roomRegistrationData.getPrice())
