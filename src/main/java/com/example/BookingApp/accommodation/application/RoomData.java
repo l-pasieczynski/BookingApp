@@ -1,4 +1,4 @@
-package com.example.BookingApp.accommodation.dto;
+package com.example.BookingApp.accommodation.application;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class RoomDto {
+public class RoomData {
 
     private String accommodationName;
     private Integer roomSize;

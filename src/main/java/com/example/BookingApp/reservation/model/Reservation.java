@@ -1,9 +1,6 @@
 package com.example.BookingApp.reservation.model;
 
-import com.example.BookingApp.accommodation.model.Accommodation;
-import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.reservation.validator.ReservationNumber;
-import com.example.BookingApp.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,9 +28,8 @@ public class Reservation {
     private Long userId;
     @NotBlank
     private Long accommodationId;
-    @OneToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @NotBlank
+    private Long roomId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Future
     private LocalDate bookIn;
@@ -57,7 +53,7 @@ public class Reservation {
         return bookOut;
     }
 
-    public Room roomId() {
-        return room;
+    public Long roomId() {
+        return roomId;
     }
 }

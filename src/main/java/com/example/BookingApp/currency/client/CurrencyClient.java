@@ -1,7 +1,7 @@
 package com.example.BookingApp.currency.client;
 
-import com.example.BookingApp.currency.dto.CurrencyDto;
-import com.example.BookingApp.currency.dto.NbpCurrencyDto;
+import com.example.BookingApp.currency.application.CurrencyData;
+import com.example.BookingApp.currency.application.NBPCurrencyData;
 import com.example.BookingApp.currency.model.Rate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -25,17 +25,17 @@ public class CurrencyClient {
         return getCurrency(yesterday, "eur").getRate();
     }
 
-    private CurrencyDto getCurrency(LocalDate date, String currencyCode) {
-        NbpCurrencyDto nbpCurrencyDto = restTemplate.getForObject(NBP_URL + "a/" + currencyCode + "/" + date + "/?format=json", NbpCurrencyDto.class);
+    private CurrencyData getCurrency(LocalDate date, String currencyCode) {
+        NBPCurrencyData NBPCurrencyData = restTemplate.getForObject(NBP_URL + "a/" + currencyCode + "/" + date + "/?format=json", NBPCurrencyData.class);
 //        NbpCurrencyDto nbpCurrencyDto = restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/rates/a/{currencyCode}/{date}/?format=json", NbpCurrencyDto.class);
-        if (nbpCurrencyDto != null) {
+        if (NBPCurrencyData != null) {
             Double value = 0.00;
-            for (Rate rate : nbpCurrencyDto.getRates()) {
+            for (Rate rate : NBPCurrencyData.getRates()) {
                 value = rate.getMid();
             }
-            return CurrencyDto.builder()
-                    .currency(nbpCurrencyDto.getCurrency())
-                    .code(nbpCurrencyDto.getCode())
+            return CurrencyData.builder()
+                    .currency(NBPCurrencyData.getCurrency())
+                    .code(NBPCurrencyData.getCode())
                     .rate(value)
                     .build();
         }

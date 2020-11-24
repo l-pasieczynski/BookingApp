@@ -1,18 +1,18 @@
-package com.example.BookingApp.accommodation.dto;
+package com.example.BookingApp.accommodation.application;
 
+import com.example.BookingApp.accommodation.application.RoomData;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
-import com.example.BookingApp.currency.application.CurrencyService;
 
 import java.time.LocalDate;
 
-public class RoomDtoMapper {
+public class RoomDataMapper {
 
-    private RoomDtoMapper() {
+    private RoomDataMapper() {
     }
 
-    public static RoomDto mapToRoomDto(Accommodation accommodation, Room room, LocalDate availability, Double dollar, Double euro) {
-        return RoomDto.builder()
+    public static RoomData mapToRoomDto(Accommodation accommodation, Room room, LocalDate availability, Double dollar, Double euro) {
+        return RoomData.builder()
                 .accommodationName(accommodation.getName())
                 .roomSize(room.getRoomSize())
                 .maxPerson(room.getMaxPerson())

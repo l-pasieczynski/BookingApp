@@ -16,7 +16,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findAllByBookOutEquals(LocalDate today);
 
-    List<Reservation> findAllByRoomOrderByCreatedDesc(Room room);
+    List<Reservation> findAllByRoomIdOrderByCreatedDesc(Long roomId);
 
     List<Reservation> findAllByAccommodationIdOrderByCreatedDesc(Long accommodationId);
 

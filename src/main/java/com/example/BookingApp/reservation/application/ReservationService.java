@@ -43,8 +43,8 @@ public class ReservationService {
         return reservationRepository.findByReservationNumber(reservationNumber);
     }
 
-    public List<Reservation> findAllReservationOfRoom(Room room) {
-        return reservationRepository.findAllByRoomOrderByCreatedDesc(room);
+    public List<Reservation> findAllReservationOfRoom(Long roomId) {
+        return reservationRepository.findAllByRoomIdOrderByCreatedDesc(roomId);
     }
 
     public List<Reservation> findAllReservationOfAccommodation(Long accommodationId) {
@@ -55,8 +55,8 @@ public class ReservationService {
         return reservationRepository.findAllByUserIdOrderByCreatedDesc(user.getId());
     }
 
-    public Reservation findLastReservationOfRoom(Room room) {
-        return reservationRepository.findLastByRoomId(room.getId());
+    public Reservation findLastReservationOfRoom(Long roomId) {
+        return reservationRepository.findLastByRoomId(roomId);
     }
 
     public LocalDate findWhenRoomAvailable(Room room) {
@@ -85,7 +85,7 @@ public class ReservationService {
                     .reservationNumber(reservationNumber)
                     .bookIn(bookIn)
                     .bookOut(bookOut)
-                    .room(room)
+                    .roomId(room.getId())
                     .userId(user.getId())
                     .active(true)
                     .build();
@@ -106,7 +106,7 @@ public class ReservationService {
 
     public void cancelReservation(Reservation reservation) {
         reservation.toBuilder().active(false).build();
-        roomService.setRoomAvailable(reservation.getRoom());
+        roomService.setRoomAvailable(reservation.roomId());
     }
 
 

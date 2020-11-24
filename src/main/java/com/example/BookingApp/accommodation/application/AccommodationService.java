@@ -1,8 +1,8 @@
 package com.example.BookingApp.accommodation.application;
 
-import com.example.BookingApp.exception.EntityNotFoundException;
 import com.example.BookingApp.accommodation.infrastructure.AccommodationRepository;
 import com.example.BookingApp.accommodation.model.Accommodation;
+import com.example.BookingApp.exception.EntityNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -24,6 +24,7 @@ public class AccommodationService {
         this.accommodationRepository = accommodationRepository;
     }
 
+
     public static Predicate<Accommodation> accommodationName(String name) {
         return accommodation -> accommodation.getName().contains(name);
     }
@@ -31,6 +32,7 @@ public class AccommodationService {
     public static Predicate<Accommodation> accommodationCity(String city) {
         return accommodation -> accommodation.getCity().startsWith(city);
     }
+
 
     public List<Accommodation> findAll() {
         return accommodationRepository.findAll();
@@ -51,7 +53,6 @@ public class AccommodationService {
     }
 
     public Accommodation save(Accommodation accommodation) {
-
         if (findById(accommodation.getId()) == null) {
             accommodationRepository.save(accommodation);
             return accommodation;

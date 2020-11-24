@@ -69,12 +69,12 @@ public class ReservationController {
 
     @GetMapping("admin/accommodation/{accommodationId}/room/{roomId}/reservationHistory")
     public List<Reservation> getAllReservationOfRoom(@PathVariable Long roomId) {
-        return reservationService.findAllReservationOfRoom(roomService.findById(roomId));
+        return reservationService.findAllReservationOfRoom(roomId);
     }
 
     @GetMapping("admin/accommodation/{accommodationId}/room/{roomId}/reservationLast")
     public Reservation getLastReservationOfRoom(@PathVariable Long roomId) {
-        return reservationService.findLastReservationOfRoom(roomService.findById(roomId));
+        return reservationService.findLastReservationOfRoom(roomId);
     }
 
     private boolean isUserRegistered(Principal principal) {

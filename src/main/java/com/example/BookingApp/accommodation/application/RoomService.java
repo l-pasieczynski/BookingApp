@@ -35,12 +35,12 @@ public class RoomService {
         return roomRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Room.class.getSimpleName()));
     }
 
-    public List<Room> findAllByAccommodation(Accommodation accommodation) {
-        return roomRepository.findAllByAccommodationOrderByPriceAsc(accommodation);
+    public List<Room> findAllByAccommodation(Long accommodationId) {
+        return roomRepository.findAllByAccommodationIdOrderByPriceAsc(accommodationId);
     }
 
-    public List<Room> findAllFreeRoomByAccommodation(Accommodation accommodation) {
-        return findAllByAccommodation(accommodation).stream()
+    public List<Room> findAllFreeRoomByAccommodation(Long accommodationId) {
+        return findAllByAccommodation(accommodationId).stream()
                 .filter(Room::isAvailable)
                 .sorted(Comparator.comparing(Room::getPrice))
                 .collect(Collectors.toList());
@@ -63,8 +63,8 @@ public class RoomService {
         return roomList;
     }
 
-    public Room addNewRoom(Room roomToSave, Accommodation accommodation) {
-        if (findAllByAccommodation(accommodation).stream()
+    public Room addNewRoom(Room roomToSave, Long accommodationId) {
+        if (findAllByAccommodation(accommodationId).stream()
                 .anyMatch(room -> room.getId().equals(roomToSave.getId()))) {
             throw new EntityExistsException();
         }
@@ -87,7 +87,7 @@ public class RoomService {
         List<Reservation> allReservationEndsToday = reservationService.findAllReservationEndsToday(today);
 
         List<Room> allRoomsReservationEndsToday = allReservationEndsToday.stream()
-                .map(reservation -> roomRepository.findById(reservation.roomId().getId()))
+                .map(reservation -> roomRepository.findById(reservation.roomId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -97,8 +97,8 @@ public class RoomService {
         }
     }
 
-    public void setRoomAvailable(Room room) {
-        Room roomForAvailability = findById(room.getId());
+    public void setRoomAvailable(Long roomId) {
+        Room roomForAvailability = findById(roomId);
         roomForAvailability.setAvailable(true);
         roomRepository.save(roomForAvailability);
     }

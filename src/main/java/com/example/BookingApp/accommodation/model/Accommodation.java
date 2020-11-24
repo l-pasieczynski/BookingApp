@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,10 +22,6 @@ public class Accommodation {
     private Long id;
     @NotBlank
     private String name;
-    @OneToMany
-    @JoinTable(name = "accommodation_room", joinColumns = @JoinColumn(name = "accommodation_id"),
-            inverseJoinColumns = @JoinColumn(name = "room_id"))
-    private List<Room> room = new ArrayList<>();
     @NotBlank
     private String city;
     @NotBlank
@@ -40,6 +35,4 @@ public class Accommodation {
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = AccommodationAddInfo.class)
     private List<AccommodationAddInfo> accommodationAddInfo;
-    private Long ReservationId;
-
 }
