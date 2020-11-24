@@ -1,6 +1,6 @@
 package com.example.BookingApp.user.application;
 
-import com.example.BookingApp.EntityNotFoundException;
+import com.example.BookingApp.exception.EntityNotFoundException;
 import com.example.BookingApp.user.dto.UserDomainMapper;
 import com.example.BookingApp.user.dto.UserDomainModel;
 import com.example.BookingApp.user.dto.UserEntityMapper;
@@ -39,8 +39,9 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public void updateUser(User user) {
+    public UserDomainModel updateUser(User user) {
         userRepository.findById(user.getId()).map(updateUser -> userRepository.save(user));
+        return UserDomainMapper.mapToDomainUser(findById(user.getId()));
     }
 
 }

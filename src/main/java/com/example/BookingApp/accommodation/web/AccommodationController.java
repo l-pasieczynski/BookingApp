@@ -1,19 +1,23 @@
 package com.example.BookingApp.accommodation.web;
 
-import com.example.BookingApp.UnauthorizedException;
 import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.dto.AccommodationDto;
 import com.example.BookingApp.accommodation.dto.AccommodationDtoMapper;
 import com.example.BookingApp.accommodation.model.Accommodation;
+import com.example.BookingApp.errors.ErrorResponse;
+import com.example.BookingApp.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -42,10 +46,13 @@ public class AccommodationController {
     }
 
     @PostMapping("/admin/addAccommodation")
-    public Accommodation addAccommodation(@RequestBody Accommodation accommodation) {
+    public ResponseEntity<Object> addAccommodation(@RequestBody @Valid Accommodation accommodation, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ErrorResponse.generateErrorList(bindingResult);
+        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
-            return accommodationService.save(accommodation);
+            return ResponseEntity.ok(accommodationService.save(accommodation));
         }
         throw new UnauthorizedException();
     }

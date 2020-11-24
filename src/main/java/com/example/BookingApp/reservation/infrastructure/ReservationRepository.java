@@ -1,9 +1,7 @@
 package com.example.BookingApp.reservation.infrastructure;
 
-import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.reservation.model.Reservation;
-import com.example.BookingApp.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +18,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findAllByRoomOrderByCreatedDesc(Room room);
 
-    List<Reservation> findAllByAccommodationOrderByCreatedDesc(Accommodation accommodation);
+    List<Reservation> findAllByAccommodationIdOrderByCreatedDesc(Long accommodationId);
 
     List<Reservation> findAllByUserIdOrderByCreatedDesc(Long userId);
 }

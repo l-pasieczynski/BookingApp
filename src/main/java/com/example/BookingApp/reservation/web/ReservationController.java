@@ -1,17 +1,22 @@
 package com.example.BookingApp.reservation.web;
 
-import com.example.BookingApp.UnauthorizedException;
-import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.application.RoomService;
 import com.example.BookingApp.accommodation.model.Room;
+import com.example.BookingApp.errors.ErrorResponse;
+import com.example.BookingApp.exception.UnauthorizedException;
 import com.example.BookingApp.reservation.application.ReservationService;
 import com.example.BookingApp.reservation.model.Reservation;
 import com.example.BookingApp.user.application.UserService;
 import com.example.BookingApp.user.dto.UserRegistrationData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Min;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,14 +29,15 @@ public class ReservationController {
     private final ReservationService reservationService;
     private final RoomService roomService;
     private final UserService userService;
-    private final AccommodationService accommodationService;
 
     @PostMapping("/accommodation/{accommodationId}/room/{roomId}/reservation")
-    public Reservation makeReservation(@RequestBody UserRegistrationData user, @PathVariable Long roomId,
-                                       @RequestParam LocalDate bookIn, @RequestParam LocalDate bookOut) {
-
+    public ResponseEntity<Object> makeReservation(@Valid @RequestBody UserRegistrationData user, @PathVariable @Min(1) Long roomId, @PathVariable @Min(1) Long accommodationId,
+                                                  @RequestParam LocalDate bookIn, @RequestParam @Future LocalDate bookOut, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ErrorResponse.generateErrorList(bindingResult);
+        }
         Room roomForReservation = roomService.findById(roomId);
-        return reservationService.makeReservation(user, roomForReservation, bookIn, bookOut);
+        return ResponseEntity.ok(reservationService.makeReservation(user, accommodationId, roomForReservation, bookIn, bookOut));
     }
 
     @PutMapping("/user/reservation/{ReservationId}")
@@ -58,7 +64,7 @@ public class ReservationController {
 
     @GetMapping("/admin/accommodation/{accommodationId}/reservation")
     public List<Reservation> getAllReservationOfAccommodation(@PathVariable Long accommodationId) {
-        return reservationService.findAllReservationOfAccommodation(accommodationService.findById(accommodationId));
+        return reservationService.findAllReservationOfAccommodation(accommodationId);
     }
 
     @GetMapping("admin/accommodation/{accommodationId}/room/{roomId}/reservationHistory")

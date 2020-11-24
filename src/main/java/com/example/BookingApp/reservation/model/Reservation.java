@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Entity
@@ -26,10 +27,10 @@ public class Reservation {
     private Long id;
     @ReservationNumber
     private Integer reservationNumber;
+    @NotBlank
     private Long userId;
-    @OneToOne
-    @JoinColumn(name = "accommodation_id")
-    private Accommodation accommodation;
+    @NotBlank
+    private Long accommodationId;
     @OneToOne
     @JoinColumn(name = "room_id")
     private Room room;

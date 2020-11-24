@@ -1,9 +1,8 @@
 package com.example.BookingApp.reservation.application;
 
-import com.example.BookingApp.EntityNotFoundException;
+import com.example.BookingApp.exception.EntityNotFoundException;
 import com.example.BookingApp.accommodation.application.AccommodationService;
 import com.example.BookingApp.accommodation.application.RoomService;
-import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.reservation.infrastructure.ReservationRepository;
 import com.example.BookingApp.reservation.model.Reservation;
@@ -47,8 +46,8 @@ public class ReservationService {
         return reservationRepository.findAllByRoomOrderByCreatedDesc(room);
     }
 
-    public List<Reservation> findAllReservationOfAccommodation(Accommodation accommodation) {
-        return reservationRepository.findAllByAccommodationOrderByCreatedDesc(accommodation);
+    public List<Reservation> findAllReservationOfAccommodation(Long accommodationId) {
+        return reservationRepository.findAllByAccommodationIdOrderByCreatedDesc(accommodationId);
     }
 
     public List<Reservation> findAllReservationOfUser(User user) {
@@ -72,7 +71,7 @@ public class ReservationService {
         return reservationRepository.findAllByBookOutEquals(today);
     }
 
-    public Reservation makeReservation(UserRegistrationData reservationUser, Room room, LocalDate bookIn, LocalDate bookOut) {
+    public Reservation makeReservation(UserRegistrationData reservationUser,Long accommodationId, Room room, LocalDate bookIn, LocalDate bookOut) {
 
         UserDomainModel user = checkIsUserAlreadyRegistered(reservationUser);
 
@@ -81,7 +80,7 @@ public class ReservationService {
             Integer reservationNumber = Integer.parseInt(reservationNumberConcat);
 
             Reservation reservation = new Reservation().toBuilder()
-                    .accommodation(room.getAccommodation())
+                    .accommodationId(accommodationId)
                     .reservationNumber(reservationNumber)
                     .bookIn(bookIn)
                     .bookOut(bookOut)
