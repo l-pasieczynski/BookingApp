@@ -1,6 +1,5 @@
 package com.example.BookingApp.reservation.infrastructure;
 
-import com.example.BookingApp.accommodation.model.Room;
 import com.example.BookingApp.reservation.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,7 +15,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findAllByBookOutEquals(LocalDate today);
 
-    List<Reservation> findAllByRoomOrderByCreatedDesc(Room room);
+    List<Reservation> findAllByRoomIdOrderByCreatedDesc(Long roomId);
 
     List<Reservation> findAllByAccommodationIdOrderByCreatedDesc(Long accommodationId);
 

@@ -1,13 +1,10 @@
 package com.example.BookingApp.user.application;
 
 import com.example.BookingApp.exception.EntityNotFoundException;
-import com.example.BookingApp.user.dto.UserDomainMapper;
-import com.example.BookingApp.user.dto.UserDomainModel;
-import com.example.BookingApp.user.dto.UserEntityMapper;
-import com.example.BookingApp.user.dto.UserRegistrationData;
 import com.example.BookingApp.user.infrastructure.RoleRepository;
 import com.example.BookingApp.user.infrastructure.UserRepository;
-import com.example.BookingApp.user.model.*;
+import com.example.BookingApp.user.model.Role;
+import com.example.BookingApp.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +18,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-    public UserDomainModel createUser(UserRegistrationData userRegistrationData) {
+    public UserDomainData createUser(UserRegistrationData userRegistrationData) {
         Role userRole = roleRepository.findByName("USER");
         userRegistrationData.setRoles(new HashSet<>(Arrays.asList(userRole)));
-        return UserDomainMapper.mapToDomainUser(userRepository.save(UserEntityMapper.mapToUserEntity(userRegistrationData)));
+        return UserMapper.mapToDomainUser(userRepository.save(UserMapper.mapToUserEntity(userRegistrationData)));
     }
 
-    public UserDomainModel findByIDNumber(Integer IDNumber) {
-        return UserDomainMapper.mapToDomainUser(userRepository.findByIDNumber(IDNumber));
+    public UserDomainData findByIDNumber(Integer IDNumber) {
+        return UserMapper.mapToDomainUser(userRepository.findByIDNumber(IDNumber));
     }
 
     public User findById(Long id) {
@@ -39,9 +36,9 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public UserDomainModel updateUser(User user) {
+    public UserDomainData updateUser(User user) {
         userRepository.findById(user.getId()).map(updateUser -> userRepository.save(user));
-        return UserDomainMapper.mapToDomainUser(findById(user.getId()));
+        return UserMapper.mapToDomainUser(findById(user.getId()));
     }
 
 }

@@ -1,11 +1,11 @@
-package com.example.BookingApp.accommodation.dto;
+package com.example.BookingApp.accommodation.application;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class AccommodationDto {
+public class AccommodationDomainData {
 
     private Long id;
     private String name;

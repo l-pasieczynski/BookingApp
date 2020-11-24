@@ -6,8 +6,8 @@ import com.example.BookingApp.errors.ErrorResponse;
 import com.example.BookingApp.exception.UnauthorizedException;
 import com.example.BookingApp.reservation.application.ReservationService;
 import com.example.BookingApp.reservation.model.Reservation;
+import com.example.BookingApp.user.application.UserRegistrationData;
 import com.example.BookingApp.user.application.UserService;
-import com.example.BookingApp.user.dto.UserRegistrationData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -69,12 +69,12 @@ public class ReservationController {
 
     @GetMapping("admin/accommodation/{accommodationId}/room/{roomId}/reservationHistory")
     public List<Reservation> getAllReservationOfRoom(@PathVariable Long roomId) {
-        return reservationService.findAllReservationOfRoom(roomService.findById(roomId));
+        return reservationService.findAllReservationOfRoom(roomId);
     }
 
     @GetMapping("admin/accommodation/{accommodationId}/room/{roomId}/reservationLast")
     public Reservation getLastReservationOfRoom(@PathVariable Long roomId) {
-        return reservationService.findLastReservationOfRoom(roomService.findById(roomId));
+        return reservationService.findLastReservationOfRoom(roomId);
     }
 
     private boolean isUserRegistered(Principal principal) {

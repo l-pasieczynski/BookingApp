@@ -1,8 +1,8 @@
 package com.example.BookingApp.accommodation.web;
 
+import com.example.BookingApp.accommodation.application.AccommodationDomainData;
+import com.example.BookingApp.accommodation.application.AccommodationMapper;
 import com.example.BookingApp.accommodation.application.AccommodationService;
-import com.example.BookingApp.accommodation.dto.AccommodationDto;
-import com.example.BookingApp.accommodation.dto.AccommodationDtoMapper;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.errors.ErrorResponse;
 import com.example.BookingApp.exception.UnauthorizedException;
@@ -30,9 +30,9 @@ public class AccommodationController {
     private final UserDetailsService userDetailsService;
 
     @GetMapping("/accommodation")
-    public List<AccommodationDto> getAllAccommodation(@RequestParam(required = false) int page) {
+    public List<AccommodationDomainData> getAllAccommodation(@RequestParam(required = false) int page) {
         int pageNumber = page > 0 ? page : 1;
-        return AccommodationDtoMapper.mapToAccommodationDtos(accommodationService.findAllAccommodation(pageNumber - 1));
+        return AccommodationMapper.mapToAccommodationDtos(accommodationService.findAllAccommodation(pageNumber - 1));
     }
 
     @GetMapping("/accommodation/{accommodationId}")

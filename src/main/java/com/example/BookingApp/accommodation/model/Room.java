@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Room {
@@ -25,9 +26,7 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private RoomStandard roomStandard;
     private String description;
-    private boolean available;
-    @ManyToOne
-    private Accommodation accommodation;
+    private Long accommodationId;
 
 
 }

@@ -1,23 +1,22 @@
-package com.example.BookingApp.accommodation.model;
+package com.example.BookingApp.accommodation.application;
 
-import lombok.*;
+import com.example.BookingApp.accommodation.model.AccommodationAddInfo;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.ElementCollection;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Accommodation {
+@RequiredArgsConstructor
+public class AccommodationRegistrationData {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @NotBlank
     private String name;
     @NotBlank
@@ -33,4 +32,5 @@ public class Accommodation {
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = AccommodationAddInfo.class)
     private List<AccommodationAddInfo> accommodationAddInfo;
+
 }

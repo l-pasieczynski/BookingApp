@@ -10,11 +10,11 @@ public class CurrencyService {
 
     private final CurrencyClient currencyClient;
 
-    public Double midDollarValue(){
+    public Double midDollarValue() {
         return currencyClient.getDollarValue();
     }
 
-    public Double midEuroValue(){
+    public Double midEuroValue() {
         return currencyClient.getEuroValue();
     }
 }

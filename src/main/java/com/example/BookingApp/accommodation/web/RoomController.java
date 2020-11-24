@@ -1,14 +1,14 @@
 package com.example.BookingApp.accommodation.web;
 
 import com.example.BookingApp.accommodation.application.AccommodationService;
+import com.example.BookingApp.accommodation.application.RoomDomainData;
+import com.example.BookingApp.accommodation.application.RoomMapper;
 import com.example.BookingApp.accommodation.application.RoomService;
-import com.example.BookingApp.accommodation.dto.RoomDto;
-import com.example.BookingApp.accommodation.dto.RoomDtoMapper;
 import com.example.BookingApp.accommodation.model.Accommodation;
 import com.example.BookingApp.accommodation.model.Room;
+import com.example.BookingApp.currency.application.CurrencyService;
 import com.example.BookingApp.errors.ErrorResponse;
 import com.example.BookingApp.exception.UnauthorizedException;
-import com.example.BookingApp.currency.application.CurrencyService;
 import com.example.BookingApp.reservation.application.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,24 +36,23 @@ public class RoomController {
 
     @GetMapping("/accommodation/{accommodationId}/room")
     public List<Room> getAllRoomsOfAccommodation(@PathVariable("accommodationId") Long id) {
-        Accommodation accommodation = accommodationService.findById(id);
-        return roomService.findAllByAccommodation(accommodation);
+        return roomService.findAllByAccommodation(id);
     }
 
     @GetMapping("/accommodation/{accommodationId}/available")
     public List<Room> getAllAvailableRoomsOfAccommodation(@PathVariable("accommodationId") Long id) {
-        return roomService.findAllFreeRoomByAccommodation(accommodationService.findById(id));
+        return reservationService.findAllFreeRoomByAccommodation(id);
     }
 
     @GetMapping("/accommodation/{accommodationId}/room/{roomId}")
-    public RoomDto getRoom(@PathVariable Long accommodationId,
-                           @PathVariable Long roomId) {
+    public RoomDomainData getRoom(@PathVariable Long accommodationId,
+                                  @PathVariable Long roomId) {
         Accommodation accommodation = accommodationService.findById(accommodationId);
         Room room = roomService.findById(roomId);
         LocalDate roomAvailability = reservationService.findWhenRoomAvailable(room);
         Double dollarValue = currencyService.midDollarValue();
         Double euroValue = currencyService.midEuroValue();
-        return RoomDtoMapper.mapToRoomDto(accommodation, room, roomAvailability, dollarValue, euroValue);
+        return RoomMapper.mapToRoomDomain(accommodation, room, roomAvailability, dollarValue, euroValue);
     }
 
     @GetMapping("/searchRoom")
@@ -63,7 +62,7 @@ public class RoomController {
                                                @RequestParam Accommodation accommodation,
                                                @RequestParam LocalDate bookIn,
                                                @RequestParam @Future LocalDate bookOut) {
-        return roomService.findAllFreeRoomByUserSearch(personQuantity, minPrice, maxPrice, accommodation, bookIn, bookOut);
+        return reservationService.findAllFreeRoomByUserSearch(personQuantity, minPrice, maxPrice, accommodation, bookIn, bookOut);
     }
 
     @PostMapping("/admin/accommodation/{accommodationId}/addRoom")
@@ -72,15 +71,14 @@ public class RoomController {
             return ErrorResponse.generateErrorList(bindingResult);
         }
         if (checkAdminAuthority()) {
-            Accommodation accommodationOfNewRoom = accommodationService.findById(accommodationId);
-            return ResponseEntity.ok(roomService.addNewRoom(newRoom, accommodationOfNewRoom));
+            return ResponseEntity.ok(roomService.addNewRoom(newRoom, accommodationId));
         }
         throw new UnauthorizedException();
     }
 
     @PutMapping("/admin/accommodation/{accommodationId}/room/{roomId}")
-    public ResponseEntity<Object>  editRoom(@PathVariable("roomId") Long id, @RequestBody @Valid Room room, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
+    public ResponseEntity<Object> editRoom(@PathVariable("roomId") Long id, @RequestBody @Valid Room room, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return ErrorResponse.generateErrorList(bindingResult);
         }
         if (checkAdminAuthority()) {
