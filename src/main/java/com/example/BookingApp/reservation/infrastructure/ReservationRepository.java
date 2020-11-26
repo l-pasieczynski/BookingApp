@@ -20,4 +20,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByAccommodationIdOrderByCreatedDesc(Long accommodationId);
 
     List<Reservation> findAllByUserIdOrderByCreatedDesc(Long userId);
+
+    List<Reservation> findAllByAccommodationIdAndActiveOrderByIdDesc(Long id, boolean active);
 }

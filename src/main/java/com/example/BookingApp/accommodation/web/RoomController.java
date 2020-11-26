@@ -49,7 +49,7 @@ public class RoomController {
                                   @PathVariable Long roomId) {
         Accommodation accommodation = accommodationService.findById(accommodationId);
         Room room = roomService.findById(roomId);
-        LocalDate roomAvailability = reservationService.findWhenRoomAvailable(room);
+        LocalDate roomAvailability = reservationService.findWhenRoomAvailable(roomId);
         Double dollarValue = currencyService.midDollarValue();
         Double euroValue = currencyService.midEuroValue();
         return RoomMapper.mapToRoomDomain(accommodation, room, roomAvailability, dollarValue, euroValue);

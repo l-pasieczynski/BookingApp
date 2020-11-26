@@ -56,13 +56,18 @@ public class ReservationService {
         return reservationRepository.findLastByRoomId(roomId);
     }
 
-    public LocalDate findWhenRoomAvailable(Room room) {
-        LocalDate availabilityOfRoom = reservationRepository.findLastByRoomId(room.getId()).bookOut();
-        return availabilityOfRoom.plusDays(1);
+    public LocalDate findWhenRoomAvailable(Long roomId) {
+        if (reservationRepository.findLastByRoomId(roomId).getBookOut() == null) {
+            return LocalDate.now();
+        }
+        return reservationRepository.findLastByRoomId(roomId).getBookOut().plusDays(1);
     }
 
-    public boolean isAvailableAtDate(LocalDate bookIn, Room room) {
-        return bookIn.compareTo(findWhenRoomAvailable(room)) >= 0;
+    public boolean isAvailableAtDate(LocalDate bookIn, Long roomId) {
+        if (findWhenRoomAvailable(roomId) == null) {
+            return true;
+        }
+        return bookIn.compareTo(findWhenRoomAvailable(roomId)) >= 0;
     }
 
     public List<Reservation> findAllReservationEndsToday(LocalDate today) {
@@ -73,13 +78,13 @@ public class ReservationService {
 
         UserDomainData user = checkIsUserAlreadyRegistered(reservationUser);
 
-        if (isAvailableAtDate(bookIn, room)) {
-            String reservationNumberConcat = LocalDate.now().toString().replaceAll("-", "") + "00" + user.getId() + "12";
+        if (isAvailableAtDate(bookIn, room.getId())) {
+            String reservationNumberConcat = LocalDate.now().toString().replaceAll("-", "") + "00" + user.getId();
             Integer reservationNumber = Integer.parseInt(reservationNumberConcat);
 
             Reservation reservation = new Reservation().toBuilder()
                     .accommodationId(accommodationId)
-                    .reservationNumber(reservationNumber)
+                    .reservationNumber(2020112000)
                     .bookIn(bookIn)
                     .bookOut(bookOut)
                     .roomId(room.getId())
@@ -132,18 +137,26 @@ public class ReservationService {
     public List<Room> findAllFreeRoomByUserSearch(Integer personQuantity, Double minPrice, Double maxPrice, Accommodation accommodation, LocalDate bookIn, LocalDate bookOut) {
         List<Room> listOfAllSearchedRooms = roomService.findByUserQuerySearch(minPrice, maxPrice, accommodation, personQuantity);
 
-        List<Room> availableRooms = listOfAllSearchedRooms.stream()
-                .filter(room -> isAvailableAtDate(bookIn, room))
+        List<Long> reservedRoomsIds = reservationRepository.findAllByAccommodationIdAndActiveOrderByIdDesc(accommodation.getId(), false).stream()
+                .map(Reservation::getRoomId)
                 .collect(Collectors.toList());
 
-        List<Room> roomList = availableRooms.stream()
+        if (reservedRoomsIds.isEmpty()) {
+            return listOfAllSearchedRooms.stream()
+                    .filter(room -> room.getMaxPerson().equals(personQuantity))
+                    .collect(Collectors.toList());
+        }
+
+        List<Room> freeRooms = listOfAllSearchedRooms.stream()
+                .filter(room -> reservedRoomsIds.contains(room.getId()))
                 .filter(room -> room.getMaxPerson().equals(personQuantity))
                 .collect(Collectors.toList());
 
-        if (roomList.isEmpty()) {
-            return availableRooms;
+        if (freeRooms.isEmpty()) {
+            return listOfAllSearchedRooms;
         }
-        return roomList;
+        return freeRooms;
+
     }
 
 
