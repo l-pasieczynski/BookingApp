@@ -74,8 +74,8 @@ public class AccommodationService {
         Random random = new Random();
         int i = 0;
         int size = accommodationRepository.findAll().size();
-        while (i < 5) {
-            int randomInt = random.nextInt(size);
+        while (i < 3) {
+            int randomInt = random.nextInt(size) + 1;
             randomAccommodationList.add(findById(Long.valueOf(randomInt)));
             i++;
         }

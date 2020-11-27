@@ -9,9 +9,9 @@ import java.util.List;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-    Reservation findByReservationNumber(Integer reservationNumber);
+    Reservation findByReservationNumber(Long reservationNumber);
 
-    Reservation findLastByRoomId(Long roomId);
+    List <Reservation> findByRoomIdOrderByIdDesc(Long roomId);
 
     List<Reservation> findAllByBookOutEquals(LocalDate today);
 

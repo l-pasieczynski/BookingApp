@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Builder
 public class ReservationDomainData {
 
-    private Integer reservationNumber;
+    private Long reservationNumber;
     private String username;
     private String email;
     private Long accommodationId;

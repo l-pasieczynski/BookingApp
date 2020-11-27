@@ -14,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +39,7 @@ public class ReservationService {
         return reservationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Reservation.class.getSimpleName()));
     }
 
-    public Reservation findByReservationNumber(Integer reservationNumber) {
+    public Reservation findByReservationNumber(Long reservationNumber) {
         return reservationRepository.findByReservationNumber(reservationNumber);
     }
 
@@ -53,14 +56,19 @@ public class ReservationService {
     }
 
     public Reservation findLastReservationOfRoom(Long roomId) {
-        return reservationRepository.findLastByRoomId(roomId);
+        List<Reservation> allRoomReservation = new ArrayList<>();
+        allRoomReservation = reservationRepository.findByRoomIdOrderByIdDesc(roomId);
+        if (allRoomReservation.isEmpty()){
+            return null;
+        }
+        return allRoomReservation.get(0);
     }
 
     public LocalDate findWhenRoomAvailable(Long roomId) {
-        if (reservationRepository.findLastByRoomId(roomId).getBookOut() == null) {
+        if (findLastReservationOfRoom(roomId) == null) {
             return LocalDate.now();
         }
-        return reservationRepository.findLastByRoomId(roomId).getBookOut().plusDays(1);
+        return findLastReservationOfRoom(roomId).getBookOut().plusDays(1);
     }
 
     public boolean isAvailableAtDate(LocalDate bookIn, Long roomId) {
@@ -80,11 +88,11 @@ public class ReservationService {
 
         if (isAvailableAtDate(bookIn, room.getId())) {
             String reservationNumberConcat = LocalDate.now().toString().replaceAll("-", "") + "00" + user.getId();
-            Integer reservationNumber = Integer.parseInt(reservationNumberConcat);
+            Long reservationNumber = Long.parseLong(reservationNumberConcat);
 
             Reservation reservation = new Reservation().toBuilder()
                     .accommodationId(accommodationId)
-                    .reservationNumber(2020112000)
+                    .reservationNumber(reservationNumber)
                     .bookIn(bookIn)
                     .bookOut(bookOut)
                     .roomId(room.getId())

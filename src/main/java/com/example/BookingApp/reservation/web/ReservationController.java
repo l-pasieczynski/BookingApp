@@ -58,7 +58,7 @@ public class ReservationController {
     }
 
     @GetMapping("/user/reservation")
-    public Reservation findUserReservationByReservationNumber(@RequestParam Integer reservationNumber) {
+    public Reservation findUserReservationByReservationNumber(@RequestParam Long reservationNumber) {
         return reservationService.findByReservationNumber(reservationNumber);
     }
 

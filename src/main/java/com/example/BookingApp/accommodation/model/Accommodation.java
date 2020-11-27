@@ -27,7 +27,6 @@ public class Accommodation {
     @Pattern(regexp = "[0-9]{2}-[0-9]{3}")
     private String postCode;
     @NotBlank
-    @Pattern(regexp = "[0-9]{3}-[0-9]{3}-[0-9]{3}")
     private Integer phoneNumber;
     private boolean animals;
     @Enumerated(EnumType.STRING)

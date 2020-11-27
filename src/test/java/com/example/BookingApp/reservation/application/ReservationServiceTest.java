@@ -12,6 +12,7 @@ import com.example.BookingApp.user.application.UserRegistrationData;
 import com.example.BookingApp.user.application.UserService;
 import com.example.BookingApp.user.model.User;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +41,7 @@ class ReservationServiceTest {
     private Reservation reservation = Reservation.builder()
             .id(1L)
             .price(100.00)
-            .reservationNumber(12345)
+            .reservationNumber(12345L)
             .accommodationId(1L)
             .roomId(1L)
             .userId(1L)
@@ -79,9 +80,9 @@ class ReservationServiceTest {
         //given
         repositoryMock.save(reservation);
         //when
-        Reservation ReservationFoundByReservationNumber = reservationService.findByReservationNumber(12345);
+        Reservation ReservationFoundByReservationNumber = reservationService.findByReservationNumber(12345L);
         //then
-        Assert.assertThat(ReservationFoundByReservationNumber.getReservationNumber(), CoreMatchers.is(12345));
+        MatcherAssert.assertThat(ReservationFoundByReservationNumber.getReservationNumber(), CoreMatchers.is(12345L));
     }
 
     @Test
@@ -91,7 +92,7 @@ class ReservationServiceTest {
         //when
         LocalDate roomAvailableAt = reservationService.findWhenRoomAvailable(reservation.getRoomId());
         //then
-        Assert.assertThat(roomAvailableAt, CoreMatchers.is(LocalDate.now().plusDays(3)));
+        MatcherAssert.assertThat(roomAvailableAt, CoreMatchers.is(LocalDate.now().plusDays(3)));
     }
 
     @Test
@@ -114,9 +115,9 @@ class ReservationServiceTest {
         //when
         List<Reservation> allReservationEndsToday = repositoryMock.findAllByBookOutEquals(LocalDate.now());
         //then
-        Assert.assertThat(allReservationEndsToday.size(), CoreMatchers.is(2));
-        Assert.assertThat(allReservationEndsToday.get(0).getId(), CoreMatchers.is(2L));
-        Assert.assertThat(allReservationEndsToday.get(1).getId(), CoreMatchers.is(3L));
+        MatcherAssert.assertThat(allReservationEndsToday.size(), CoreMatchers.is(2));
+        MatcherAssert.assertThat(allReservationEndsToday.get(0).getId(), CoreMatchers.is(2L));
+        MatcherAssert.assertThat(allReservationEndsToday.get(1).getId(), CoreMatchers.is(3L));
     }
 
     @Test
@@ -140,11 +141,13 @@ class ReservationServiceTest {
         LocalDate bookOut = LocalDate.now().plusDays(3);
 
         Room room = new Room();
+        room.setId(2L);
 
         //when
-        reservationService.makeReservation(user,accommodation.getId(),room, bookIn, bookOut);
-
+        Reservation reservation = reservationService.makeReservation(user, accommodation.getId(), room, bookIn, bookOut);
         //then
+        MatcherAssert.assertThat(reservation.getRoomId(), CoreMatchers.is(2L));
+        MatcherAssert.assertThat(reservation.getBookOut(), CoreMatchers.is(bookOut));
     }
 
     @Test
@@ -157,7 +160,7 @@ class ReservationServiceTest {
         //when
         reservationService.cancelReservation(reservation);
         //then
-        Assert.assertThat(reservationService.findById(1L).isActive(), CoreMatchers.is(false));
+        MatcherAssert.assertThat(reservationService.findById(1L).isActive(), CoreMatchers.is(false));
     }
 
     @Test
@@ -213,7 +216,7 @@ class ReservationServiceTest {
                 bookIn,
                 bookOut);
         //then
-        Assert.assertThat(allFreeRoomByUserSearch.get(0), CoreMatchers.is(secondRoom));
+        MatcherAssert.assertThat(allFreeRoomByUserSearch.get(0), CoreMatchers.is(secondRoom));
 
     }
 }

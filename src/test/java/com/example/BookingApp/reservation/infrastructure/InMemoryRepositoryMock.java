@@ -33,7 +33,7 @@ public class InMemoryRepositoryMock implements ReservationRepository {
 
 
     @Override
-    public Reservation findByReservationNumber(Integer reservationNumber) {
+    public Reservation findByReservationNumber(Long reservationNumber) {
         Reservation reservation = new Reservation();
         Set<Long> keys = reservations.keySet();
         for (Long key : keys) {
@@ -44,7 +44,7 @@ public class InMemoryRepositoryMock implements ReservationRepository {
     }
 
     @Override
-    public Reservation findLastByRoomId(Long roomId) {
+    public List<Reservation> findByRoomIdOrderByIdDesc(Long roomId) {
         List<Reservation> reservationList = new ArrayList<>();
         Set<Long> keys = reservations.keySet();
         for (Long key : keys) {
@@ -52,10 +52,10 @@ public class InMemoryRepositoryMock implements ReservationRepository {
                 reservationList.add(reservations.get(key));
             }
         }
-        if(reservationList.size() >= 1){
-            return reservationList.get(0);
+        if(reservationList.isEmpty()){
+            return Collections.emptyList();
         }
-        return null;
+        return reservationList;
     }
 
     @Override
@@ -64,6 +64,18 @@ public class InMemoryRepositoryMock implements ReservationRepository {
         Set<Long> keys = reservations.keySet();
         for (Long key : keys) {
             if (reservations.get(key).getBookOut().equals(today)) {
+                reservationList.add(reservations.get(key));
+            }
+        }
+        return reservationList;
+    }
+
+    @Override
+    public List<Reservation> findAllByAccommodationIdAndActiveOrderByIdDesc(Long id, boolean active) {
+        List<Reservation> reservationList = new ArrayList<>();
+        Set<Long> keys = reservations.keySet();
+        for (Long key : keys) {
+            if (reservations.get(key).getAccommodationId().equals(id) && (reservations.get(key)).isActive()) {
                 reservationList.add(reservations.get(key));
             }
         }
@@ -82,11 +94,6 @@ public class InMemoryRepositoryMock implements ReservationRepository {
 
     @Override
     public List<Reservation> findAllByUserIdOrderByCreatedDesc(Long userId) {
-        return null;
-    }
-
-    @Override
-    public List<Reservation> findAllByAccommodationIdAndActiveOrderByIdDesc(Long id, boolean active) {
         return null;
     }
 

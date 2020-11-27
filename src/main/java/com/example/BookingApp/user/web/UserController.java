@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{userId}/reservation/{reservationId}")
-    public Reservation getAllUserReservation(@PathVariable Long userId, @RequestParam Integer reservationNumber, Principal principal) {
+    public Reservation getAllUserReservation(@PathVariable Long userId, @RequestParam Long reservationNumber, Principal principal) {
         if (checkUserAuthority() && userService.findByUsername(principal.getName()).equals(userService.findById(userId))) {
             return reservationService.findByReservationNumber(reservationNumber);
         }

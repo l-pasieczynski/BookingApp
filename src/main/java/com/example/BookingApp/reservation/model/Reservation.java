@@ -23,7 +23,7 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ReservationNumber
-    private Integer reservationNumber;
+    private Long reservationNumber;
     @NotBlank
     private Long userId;
     @NotBlank

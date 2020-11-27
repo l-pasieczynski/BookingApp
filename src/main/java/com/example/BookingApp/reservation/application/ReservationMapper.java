@@ -25,7 +25,7 @@ public class ReservationMapper {
                 .build();
     }
 
-    public static Reservation mapToReservationEntity(ReservationRegistrationData reservationRegistrationData, User user, Integer reservationNumber, Double price) {
+    public static Reservation mapToReservationEntity(ReservationRegistrationData reservationRegistrationData, User user, Long reservationNumber, Double price) {
         return Reservation.builder()
                 .accommodationId(reservationRegistrationData.getAccommodationId())
                 .roomId(reservationRegistrationData.getRoomId())
