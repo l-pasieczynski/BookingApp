@@ -13,7 +13,6 @@ import com.example.BookingApp.user.application.UserService;
 import com.example.BookingApp.user.model.User;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

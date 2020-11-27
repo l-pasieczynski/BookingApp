@@ -46,5 +46,5 @@ INSERT INTO USER_ROLE (`user_id`, `role_id`) VALUES (3,1);
 
 INSERT INTO RESERVATION (`id`, `reservation_number`, `user_id`, `accommodation_id`, `room_id`, `price`, `book_in`, `book_out`, `created`, `active`) VALUES (null, 20201127001, 1, 1, 1, 300.00, '2020-11-28', '2020-11-30', '2020-11-27', true);
 INSERT INTO RESERVATION (`id`, `reservation_number`, `user_id`, `accommodation_id`, `room_id`, `price`, `book_in`, `book_out`, `created`, `active`) VALUES (null, 20201127001, 1, 1, 1, 220.00, '2020-11-21', '2020-11-25', '2020-11-20', false);
-INSERT INTO RESERVATION (`id`, `reservation_number`, `user_id`, `accommodation_id`, `room_id`, `price`, `book_in`, `book_out`, `created`, `active`) VALUES (null, 20201127002, 2, 2, 3, 350.00, '2020-12-01', '2020-12-05', '2020-11-25', true);
-INSERT INTO RESERVATION (`id`, `reservation_number`, `user_id`, `accommodation_id`, `room_id`, `price`, `book_in`, `book_out`, `created`, `active`) VALUES (null, 20201127003, 3, 3, 2, 150.00, '2020-12-24', '2020-12-27', '2020-11-25', true);
+INSERT INTO RESERVATION (`id`, `reservation_number`, `user_id`, `accommodation_id`, `room_id`, `price`, `book_in`, `book_out`, `created`, `active`) VALUES (null, 20201127002, 2, 2, 7, 350.00, '2020-12-01', '2020-12-05', '2020-11-25', true);
+INSERT INTO RESERVATION (`id`, `reservation_number`, `user_id`, `accommodation_id`, `room_id`, `price`, `book_in`, `book_out`, `created`, `active`) VALUES (null, 20201127003, 3, 3, 9, 150.00, '2020-12-24', '2020-12-27', '2020-11-25', true);

@@ -14,10 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +56,7 @@ public class ReservationService {
     public Reservation findLastReservationOfRoom(Long roomId) {
         List<Reservation> allRoomReservation = new ArrayList<>();
         allRoomReservation = reservationRepository.findByRoomIdOrderByIdDesc(roomId);
-        if (allRoomReservation.isEmpty()){
+        if (allRoomReservation.isEmpty()) {
             return null;
         }
         return allRoomReservation.get(0);
@@ -128,16 +126,26 @@ public class ReservationService {
     }
 
     public List<Room> findAllFreeRoomByAccommodation(Long accommodationId) {
-        return roomService.findAllByAccommodation(accommodationId).stream()
-                .filter(room -> findAvailableRoomId(accommodationId).contains(room.getId()))
+        List<Room> allByAccommodation = roomService.findAllByAccommodation(accommodationId);
+        List<Long> availableRoomId = findAvailableRoomId(accommodationId);
+
+        for (int i = 0; i < allByAccommodation.size(); i++) {
+            if (availableRoomId.contains(allByAccommodation.get(i).getId())) {
+                allByAccommodation.remove(allByAccommodation.get(i));
+            }
+        }
+
+        return allByAccommodation
+                .stream()
                 .sorted(Comparator.comparing(Room::getPrice))
                 .collect(Collectors.toList());
     }
 
     private List<Long> findAvailableRoomId(Long accommodationId) {
-        return reservationRepository.findAllByAccommodationIdOrderByCreatedDesc(accommodationId)
+        List<Reservation> allReservationOfAccommodation = reservationRepository.findAllByAccommodationIdOrderByCreatedDesc(accommodationId);
+        allReservationOfAccommodation.removeIf(reservation -> !reservation.isActive());
+        return allReservationOfAccommodation
                 .stream()
-                .filter(reservation -> !reservation.isActive())
                 .map(Reservation::getRoomId)
                 .collect(Collectors.toList());
     }
