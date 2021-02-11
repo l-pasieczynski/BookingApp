@@ -8,10 +8,6 @@ Room booking app
 * [Status](#status)
 
 ## General info
-Pair Programming with Krzysztof Dyrkacz: https://github.com/KrzysiekDyrkacz through WebAppTeam2020 Repository. </br>
-Create and manage surveys through application. </br>
-Create PDF raports from conducted market research. </br>
-Contact with registered user by e-mail.
 
 ## Technologies
 * Java
